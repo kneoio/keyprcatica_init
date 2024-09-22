@@ -1,1 +1,23 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.pyc
+
+# Virtual environment
+.env/
+venv/
+
+# IDE configurations
+.idea/
+.vscode/
+
+# Environment variable files
 /.env
+
+# Log files
+*.log
+
+# Jupyter notebooks
+.ipynb_checkpoints
+
+# macOS specific
+.DS_Store
