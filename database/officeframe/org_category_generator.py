@@ -1,14 +1,22 @@
-from faker import Faker
+import json
+
 from database import get_connection
 from util.logging import logger
+from cnst.const import generate_loc_name  # Import the helper function
 
-fake = Faker()
+# Hardcoded organization categories
+org_categories = [
+    {"identifier": "holding", "loc_name": generate_loc_name("Holding Company", "Empresa Holding", "Холдинг компаниясы")},
+    {"identifier": "ltd", "loc_name": generate_loc_name("Limited Company", "Empresa Limitada", "Жауапкершілігі шектеулі серіктестік")},
+    {"identifier": "state_agency", "loc_name": generate_loc_name("State Agency", "Agência Estatal", "Мемлекеттік агенттік")},
+    {"identifier": "fund", "loc_name": generate_loc_name("Investment Fund", "Fundo de Investimento", "Инвестициялық қор")}
+]
 
-def generate_org_categories(count=10):
+def generate_org_categories():
     conn = get_connection()
     cursor = conn.cursor()
 
-    for i in range(count):
+    for org_category in org_categories:
         try:
             cursor.execute("""
                 INSERT INTO __org_categories (author, last_mod_user, identifier, loc_name)
@@ -16,12 +24,12 @@ def generate_org_categories(count=10):
                 """, (
                 0,  # author set to 0
                 0,  # last_mod_user set to 0
-                fake.unique.word(),  # identifier
-                fake.json(),  # loc_name can be random JSON
+                org_category["identifier"],
+                json.dumps(org_category["loc_name"])  # loc_name as JSON
             ))
-            logger.info(f"Org Category {i + 1}/{count} inserted.")
+            logger.info(f"Org Category '{org_category['identifier']}' inserted.")
         except Exception as e:
-            logger.error(f"Error inserting org category {i + 1}: {e}")
+            logger.error(f"Error inserting org category '{org_category['identifier']}': {e}")
 
     conn.commit()
     cursor.close()
