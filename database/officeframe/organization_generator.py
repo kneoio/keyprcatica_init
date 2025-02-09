@@ -1,7 +1,7 @@
 from faker import Faker
 from database import get_connection
 from util.logging import logger
-from cnst.const import generate_loc_name  # Import the helper function
+from cnst.const import generate_loc_name
 import json
 
 fake = Faker()
