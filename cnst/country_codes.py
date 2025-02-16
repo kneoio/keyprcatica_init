@@ -1,4 +1,3 @@
-# country_codes.py
 
 country_codes = [
     {"name": "KZ", "code": 777},

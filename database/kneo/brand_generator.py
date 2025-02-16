@@ -6,7 +6,7 @@ import random
 
 from cnst.const import generate_loc_name
 from database import get_connection
-from database.country_codes import country_codes
+from cnst.country_codes import country_codes
 from util.logging import logger
 from util.permissions import add_superuser_permissions
 
