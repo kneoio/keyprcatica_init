@@ -9,6 +9,7 @@ from slugify import slugify
 from cnst.const import generate_loc_name
 from database import get_connection
 from util.logging import logger
+from util.permissions import add_superuser_permissions
 
 fake = Faker()
 
@@ -46,25 +47,8 @@ def generate_sound_fragments():
                 (author, reg_date, last_mod_user, last_mod_date, source, status, priority, played, file_uri, local_path, type, title, slug_name, artist, genre, album, loc_name, add_info, archived)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
             """, (
-                0,
-                now,
-                0,
-                now,
-                "local",
-                1,
-                1,
-                0,
-                "file://" + filename,
-                file_path,
-                "mp3",
-                title,
-                slug_name,
-                artist,
-                genre,
-                album,
-                json.dumps(loc_name),
-                json.dumps(add_info),
-                0
+                0, now, 0, now, "local", 1, 1, 0, "file://" + filename, file_path, "mp3",
+                title, slug_name, artist, genre, album, json.dumps(loc_name), json.dumps(add_info), 0
             ))
             fragment_id = cursor.fetchone()[0]
 
@@ -72,14 +56,7 @@ def generate_sound_fragments():
                 INSERT INTO kneobroadcaster__sound_fragments_files 
                 (entity_id, original_name, mime_type, size, file_data, version)
                 VALUES (%s, %s, %s, %s, %s, %s)
-            """, (
-                fragment_id,
-                filename,
-                "audio/mpeg",
-                len(file_data),
-                file_data,
-                1
-            ))
+            """, (fragment_id, filename, "audio/mpeg", len(file_data), file_data, 1))
 
             cursor.execute("SELECT id FROM __labels ORDER BY RANDOM() LIMIT 1")
             label = cursor.fetchone()
@@ -88,10 +65,7 @@ def generate_sound_fragments():
                     INSERT INTO kneobroadcaster__sound_fragments_labels 
                     (id, label_id)
                     VALUES (%s, %s)
-                """, (
-                    fragment_id,
-                    label[0]
-                ))
+                """, (fragment_id, label[0]))
 
             cursor.execute("SELECT id FROM _users ORDER BY RANDOM() LIMIT 1")
             reader = cursor.fetchone()
@@ -100,13 +74,9 @@ def generate_sound_fragments():
                     INSERT INTO kneobroadcaster__sound_fragments_readers 
                     (reader, entity_id, can_edit, can_delete, reading_time)
                     VALUES (%s, %s, %s, %s, %s)
-                """, (
-                    reader[0],
-                    fragment_id,
-                    False,
-                    False,
-                    now
-                ))
+                """, (reader[0], fragment_id, False, False, now))
+
+            add_superuser_permissions(cursor, fragment_id, "kneobroadcaster__sound_fragments_readers")
 
             logger.info(f"Sound fragment inserted for file: {filename}")
         except Exception as e:
@@ -116,4 +86,3 @@ def generate_sound_fragments():
     cursor.close()
     conn.close()
     logger.info("Finished inserting sound fragments.")
-

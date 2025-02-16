@@ -4,7 +4,7 @@ from database.kneo.music_label_generator import generate_labels
 from database.kneo.soundfragment_generator import generate_sound_fragments
 
 if __name__ == "__main__":
+    generate_labels()
     generate_brands()
     generate_listeners()
-    generate_labels()
     generate_sound_fragments()

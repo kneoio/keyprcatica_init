@@ -8,7 +8,9 @@ def delete_data():
     try:
         tables = [
             "kneobroadcaster__listeners_brands",
+            "kneobroadcaster__listener_readers",
             "kneobroadcaster__listeners",
+            "kneobroadcaster__brand_readers",
             "kneobroadcaster__brands",
             "__labels",
             "kneobroadcaster__sound_fragments_readers",

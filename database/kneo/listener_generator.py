@@ -6,6 +6,7 @@ from slugify import slugify
 from cnst.const import generate_loc_name
 from database import get_connection
 from util.logging import logger
+from util.permissions import add_superuser_permissions
 
 fake = Faker()
 
@@ -16,8 +17,12 @@ def generate_listeners(count=10):
     for i in range(count):
         try:
             now = datetime.now()
-            cursor.execute("SELECT id FROM _users ORDER BY RANDOM() LIMIT 1")
-            user_id = cursor.fetchone()[0]
+            cursor.execute(
+                "SELECT reader, brand.id "
+                "FROM kneobroadcaster__brands brand, kneobroadcaster__brand_readers rls "
+                "WHERE brand.id = rls.entity_id and reader > 1 ORDER BY RANDOM() LIMIT 1")
+            user_id, brand_id = cursor.fetchone()
+
 
             listener_name = fake.name()
             slug_name = slugify(listener_name)
@@ -42,9 +47,6 @@ def generate_listeners(count=10):
                 0
             ))
             listener_id = cursor.fetchone()[0]
-
-            cursor.execute("SELECT id FROM kneobroadcaster__brands ORDER BY RANDOM() LIMIT 1")
-            brand_id = cursor.fetchone()[0]
             cursor.execute("""
                 INSERT INTO kneobroadcaster__listeners_brands 
                 (id, reg_date, brand_id, rank)
@@ -55,6 +57,21 @@ def generate_listeners(count=10):
                 brand_id,
                 fake.random_int(min=1, max=10)
             ))
+
+            cursor.execute("""
+                INSERT INTO kneobroadcaster__listener_readers 
+                (reader, entity_id, can_edit, can_delete, reading_time)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (
+                user_id,
+                listener_id,
+                True,
+                True,
+                now
+            ))
+
+            add_superuser_permissions(cursor, listener_id, "kneobroadcaster__listener_readers")
+
             logger.info(f"Listener {i + 1}/{count} inserted with name: {listener_name}")
         except Exception as e:
             logger.error(f"Error inserting listener {i + 1}: {e}")
