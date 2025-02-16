@@ -10,16 +10,21 @@ def generate_users(count=10):
 
     for i in range(count):
         try:
+            login = fake.user_name()
             cursor.execute("""
-                INSERT INTO _users (author, last_mod_user, login, email, default_lang, status, reg_date, last_mod_date)
-                VALUES (%s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                INSERT INTO _users (author, last_mod_user, login, email, default_lang, status, reg_date, last_mod_date, 
+                                    whatsapp_name, telegram_name, slack_name)
+                VALUES (%s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, %s, %s, %s)
                 """, (
-                0,  # author set to 0
-                0,  # last_mod_user set to 0
-                fake.user_name(),
+                0,
+                0,
+                login,
                 fake.email(),
-                fake.random_int(min=1, max=5),  # default_lang can map to predefined languages
-                fake.random_int(min=0, max=1),  # status (active/inactive)
+                fake.random_int(min=1, max=5),
+                fake.random_int(min=0, max=1),
+                f"{login}_whatsapp",
+                f"{login}_telegram",
+                f"{login}_slack",
             ))
             logger.info(f"User {i + 1}/{count} inserted.")
         except Exception as e:

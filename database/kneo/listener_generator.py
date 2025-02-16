@@ -42,7 +42,7 @@ def generate_listeners(count=10):
 
             cursor.execute("""
                 INSERT INTO kneobroadcaster__listeners 
-                (user_id, author, reg_date, last_mod_user, last_mod_date, country, loc_name, nick_name, slug_name, archived)
+                (user_id, author, reg_date, last_mod_user, last_mod_date, country, loc_name, nickname, slug_name, archived)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
             """, (
                 user_id,
@@ -60,7 +60,7 @@ def generate_listeners(count=10):
 
             cursor.execute("""
                 INSERT INTO kneobroadcaster__listeners_brands 
-                (id, reg_date, brand_id, rank)
+                (listener_id, reg_date, brand_id, rank)
                 VALUES (%s, %s, %s, %s)
             """, (
                 listener_id,
