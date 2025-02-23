@@ -19,7 +19,7 @@ def generate_sound_fragments():
     cursor = conn.cursor()
 
     mp3_files = [f for f in os.listdir(folder) if f.lower().endswith(".mp3")]
-    selected_files = random.sample(mp3_files, min(5, len(mp3_files)))
+    selected_files = random.sample(mp3_files, min(10, len(mp3_files)))
 
     for filename in selected_files:
         try:
@@ -47,13 +47,13 @@ def generate_sound_fragments():
                 (author, reg_date, last_mod_user, last_mod_date, source, status, priority, played, file_uri, local_path, type, title, slug_name, artist, genre, album, loc_name, add_info, archived)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
             """, (
-                0, now, 0, now, "local", 1, 1, 0, "file://" + filename, file_path, "mp3",
+                0, now, 0, now, "LOCAL", 1, 1, 0, "file://" + filename, file_path, "SONG",
                 title, slug_name, artist, genre, album, json.dumps(loc_name), json.dumps(add_info), 0
             ))
             fragment_id = cursor.fetchone()[0]
 
             cursor.execute("""
-                INSERT INTO kneobroadcaster__sound_fragments_files 
+                INSERT INTO kneobroadcaster__sound_fragment_files 
                 (entity_id, original_name, mime_type, size, file_data, version)
                 VALUES (%s, %s, %s, %s, %s, %s)
             """, (fragment_id, filename, "audio/mpeg", len(file_data), file_data, 1))
@@ -62,7 +62,7 @@ def generate_sound_fragments():
             label = cursor.fetchone()
             if label:
                 cursor.execute("""
-                    INSERT INTO kneobroadcaster__sound_fragments_labels 
+                    INSERT INTO kneobroadcaster__sound_fragment_labels 
                     (id, label_id)
                     VALUES (%s, %s)
                 """, (fragment_id, label[0]))
@@ -71,12 +71,12 @@ def generate_sound_fragments():
             reader = cursor.fetchone()
             if reader:
                 cursor.execute("""
-                    INSERT INTO kneobroadcaster__sound_fragments_readers 
+                    INSERT INTO kneobroadcaster__sound_fragment_readers 
                     (reader, entity_id, can_edit, can_delete, reading_time)
                     VALUES (%s, %s, %s, %s, %s)
                 """, (reader[0], fragment_id, False, False, now))
 
-            add_superuser_permissions(cursor, fragment_id, "kneobroadcaster__sound_fragments_readers")
+            add_superuser_permissions(cursor, fragment_id, "kneobroadcaster__sound_fragment_readers")
 
             logger.info(f"Sound fragment inserted for file: {filename}")
         except Exception as e:
