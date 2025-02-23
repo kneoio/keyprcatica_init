@@ -18,6 +18,14 @@ def generate_sound_fragments():
     conn = get_connection()
     cursor = conn.cursor()
 
+    # Fetch all existing brand IDs
+    cursor.execute("SELECT id FROM kneobroadcaster__brands")
+    brand_ids = [row[0] for row in cursor.fetchall()]
+
+    if not brand_ids:
+        logger.warning("No brands found in the database. Skipping brand-sound fragment binding.")
+        return
+
     mp3_files = [f for f in os.listdir(folder) if f.lower().endswith(".mp3")]
     selected_files = random.sample(mp3_files, min(10, len(mp3_files)))
 
@@ -58,6 +66,17 @@ def generate_sound_fragments():
                 VALUES (%s, %s, %s, %s, %s, %s)
             """, (fragment_id, filename, "audio/mpeg", len(file_data), file_data, 1))
 
+            # Randomly associate the sound fragment with one or more brands
+            num_brands_to_associate = random.randint(1, min(3, len(brand_ids)))  # Associate with 1-3 brands
+            selected_brand_ids = random.sample(brand_ids, num_brands_to_associate)
+
+            for brand_id in selected_brand_ids:
+                cursor.execute("""
+                    INSERT INTO kneobroadcaster__brand_sound_fragments 
+                    (brand_id, sound_fragment_id, played_by_brand_count, last_time_played_by_brand)
+                    VALUES (%s, %s, %s, %s)
+                """, (brand_id, fragment_id, 0, None))
+
             cursor.execute("SELECT id FROM __labels ORDER BY RANDOM() LIMIT 1")
             label = cursor.fetchone()
             if label:
@@ -85,4 +104,4 @@ def generate_sound_fragments():
     conn.commit()
     cursor.close()
     conn.close()
-    logger.info("Finished inserting sound fragments.")
+    logger.info("Finished inserting sound fragments and binding them to brands.")
