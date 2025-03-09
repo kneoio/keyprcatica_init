@@ -1,76 +1,136 @@
 import os
+import re
+import json
+import random
+from datetime import datetime
 import boto3
-from botocore.exceptions import NoCredentialsError, PartialCredentialsError, EndpointConnectionError
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Get environment variables
+# Get environment variables for DigitalOcean Spaces
 access_key = os.getenv('DO_SPACES_KEY')
 secret_key = os.getenv('DO_SPACES_SECRET')
 region = os.getenv('DO_SPACES_REGION')
 endpoint = os.getenv('DO_SPACES_ENDPOINT')
 bucket_name = os.getenv('DO_SPACES_BUCKET')
 
-def list_files_in_bucket(client, bucket_name):
+
+def get_files_from_do_spaces():
     try:
-        # List objects in the bucket
-        response = client.list_objects_v2(Bucket=bucket_name)
-        print("API Response:", response)  # Debugging: Print the full API response
-
-        # Check if the 'Contents' key exists in the response
-        if 'Contents' in response:
-            print(f"Files in bucket '{bucket_name}':")
-            for file in response['Contents']:
-                print(f"- {file['Key']} (Size: {file['Size']} bytes)")
-        else:
-            print(f"No files found in bucket '{bucket_name}'.")
-
-    except Exception as e:
-        print(f"Failed to list files: {e}")
-
-def check_do_spaces_connection():
-    try:
-        # Initialize a session using DigitalOcean Spaces
         session = boto3.session.Session()
         client = session.client(
             's3',
             region_name=region,
-            endpoint_url=f"https://{endpoint}",  # Add https:// here
+            endpoint_url=f"https://{endpoint}",
             aws_access_key_id=access_key,
             aws_secret_access_key=secret_key
         )
 
-        # List buckets to test connectivity
-        response = client.list_buckets()
-        print("API Response:", response)  # Debugging: Print the full API response
+        # Get all objects in the bucket
+        response = client.list_objects_v2(Bucket=bucket_name)
 
-        # Check if the 'Buckets' key exists in the response
-        if 'Buckets' in response:
-            print("Connection successful! Available buckets:")
-            for bucket in response['Buckets']:
-                print(f"- {bucket['Name']}")
+        files = []
+        folders = set()
 
-            # Check if the specified bucket exists
-            bucket_exists = any(bucket['Name'] == bucket_name for bucket in response['Buckets'])
-            if bucket_exists:
-                print(f"Bucket '{bucket_name}' exists.")
-                # List files in the bucket
-                list_files_in_bucket(client, bucket_name)
-            else:
-                print(f"Bucket '{bucket_name}' does not exist.")
+        if 'Contents' in response:
+            for obj in response['Contents']:
+                key = obj['Key']
+                # Check if it's a folder
+                if key.endswith('/'):
+                    folders.add(key)
+                # Otherwise it's a file
+                else:
+                    files.append(key)
+
+                    # Add parent folders
+                    parts = key.split('/')
+                    if len(parts) > 1:
+                        for i in range(1, len(parts)):
+                            folder = '/'.join(parts[:i]) + '/'
+                            folders.add(folder)
+
+            # Convert folders to list
+            folders = list(folders)
+            print(f"Found {len(files)} files and {len(folders)} folders")
+
+            if folders:
+                print("\nFolders:")
+                for folder in folders[:10]:  # Show first 10 folders
+                    print(f"- {folder}")
+                if len(folders) > 10:
+                    print(f"... and {len(folders) - 10} more")
+
+            # If folders exist, randomly select files and folders
+            if folders:
+                # Decide whether to pick from specific folders
+                use_folders = random.choice([True, False])
+
+                if use_folders and folders:
+                    print("\nSelecting from specific folders")
+                    # Select random folders
+                    selected_folders = random.sample(folders, min(3, len(folders)))
+                    print("Selected folders:")
+                    for folder in selected_folders:
+                        print(f"- {folder}")
+
+                    selected_files = []
+
+                    # Get files from the selected folders
+                    for folder in selected_folders:
+                        folder_files = [f for f in files if f.startswith(folder)]
+                        if folder_files:
+                            folder_selection = random.sample(folder_files, min(5, len(folder_files)))
+                            print(f"\nSelected {len(folder_selection)} files from folder '{folder}':")
+                            for file in folder_selection:
+                                print(f"- {file}")
+                            selected_files.extend(folder_selection)
+
+                    # If we didn't get enough files from folders, add some random ones
+                    if len(selected_files) < 10 and files:
+                        remaining_files = [f for f in files if f not in selected_files]
+                        additional_count = min(10 - len(selected_files), len(remaining_files))
+                        if additional_count > 0:
+                            additional_files = random.sample(remaining_files, additional_count)
+                            print(f"\nAdded {len(additional_files)} additional random files to reach minimum count:")
+                            for file in additional_files:
+                                print(f"- {file}")
+                            selected_files.extend(additional_files)
+
+                    print(f"\nTotal selected files: {len(selected_files)}")
+                    return selected_files
+                else:
+                    print("\nSelecting random files from entire bucket")
+
+            # Default: return random files from the entire bucket
+            selected_files = random.sample(files, min(25, len(files)))
+            print(f"\nSelected {len(selected_files)} random files from entire bucket")
+            for file in selected_files[:10]:  # Show first 10 files
+                print(f"- {file}")
+            if len(selected_files) > 10:
+                print(f"... and {len(selected_files) - 10} more")
+
+            return selected_files
         else:
-            print("Connection successful, but no buckets found in your account.")
-
-    except NoCredentialsError:
-        print("Credentials not found. Please check your .env file.")
-    except PartialCredentialsError:
-        print("Incomplete credentials provided. Please check your .env file.")
-    except EndpointConnectionError:
-        print("Unable to connect to the DigitalOcean Spaces endpoint. Check your endpoint URL.")
+            print("No files found in the bucket.")
+            return []
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"Failed to fetch files from DigitalOcean Spaces: {e}")
+        return []
+
+
+def test_file_selection():
+    print("Testing file selection from DigitalOcean Spaces...")
+    print(f"Bucket: {bucket_name}")
+    print(f"Endpoint: {endpoint}")
+    print("=" * 50)
+
+    selected_files = get_files_from_do_spaces()
+
+    print("=" * 50)
+    print(f"Selection complete. Total files selected: {len(selected_files)}")
+
 
 if __name__ == "__main__":
-    check_do_spaces_connection()
+    test_file_selection()
