@@ -144,7 +144,7 @@ def generate_sound_fragments():
             ))
             fragment_id = cursor.fetchone()[0]
 
-            num_brands_to_associate = random.randint(1, min(3, len(brand_ids)))
+            num_brands_to_associate = random.randint(1, min(20, len(brand_ids)))
             selected_brand_ids = random.sample(brand_ids, num_brands_to_associate)
 
             for brand_id in selected_brand_ids:
