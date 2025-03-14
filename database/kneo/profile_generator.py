@@ -13,7 +13,7 @@ environments = {
         "announcement_frequency": "low",
         "volume_level": "low",
         "explicit_content": False,
-        "language": "pt"
+        "language": "POR"
     },
     "hospital": {
         "description": "Calming selections, limited announcement volume, wellness themes.",
