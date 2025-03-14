@@ -136,10 +136,10 @@ def generate_sound_fragments():
 
             cursor.execute("""
                 INSERT INTO kneobroadcaster__sound_fragments 
-                (author, reg_date, last_mod_user, last_mod_date, source, status, priority, type, title, artist, genre, album, loc_name, add_info, slug_name, do_key, archived)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
+                (author, reg_date, last_mod_user, last_mod_date, source, status, type, title, artist, genre, album, loc_name, add_info, slug_name, do_key, archived)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
             """, (
-                0, now, 0, now, "DIGITALOCEAN", 1, 1, "SONG",
+                0, now, 0, now, "DIGITALOCEAN", 1, "SONG",
                 title, artist, genre, album, json.dumps(loc_name), json.dumps(add_info), slug_name, do_key, 0
             ))
             fragment_id = cursor.fetchone()[0]
