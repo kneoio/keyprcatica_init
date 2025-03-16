@@ -25,7 +25,14 @@ region = os.getenv('DO_SPACES_REGION')
 endpoint = os.getenv('DO_SPACES_ENDPOINT')
 bucket_name = os.getenv('DO_SPACES_BUCKET')
 
+# Configuration parameters
+SONGS_PER_BRAND = 50  # Number of songs to add per radio station
+MAX_FILES_TO_FETCH = 100  # Maximum number of files to fetch from storage
+MAX_FILES_PER_FOLDER = 10  # Maximum files to select from each folder
+NUM_FOLDERS_TO_SELECT = 3  # Number of folders to randomly select
 
+
+# Change 1: Modify the get_files_from_do_spaces function to get more files
 def get_files_from_do_spaces():
     try:
         session = boto3.session.Session()
@@ -70,28 +77,28 @@ def get_files_from_do_spaces():
 
                 if use_folders and folders:
                     # Select random folders
-                    selected_folders = random.sample(folders, min(3, len(folders)))
+                    selected_folders = random.sample(folders, min(NUM_FOLDERS_TO_SELECT, len(folders)))
                     selected_files = []
 
                     # Get files from the selected folders
                     for folder in selected_folders:
                         folder_files = [f for f in files if f.startswith(folder)]
                         if folder_files:
-                            folder_selection = random.sample(folder_files, min(5, len(folder_files)))
+                            folder_selection = random.sample(folder_files, min(MAX_FILES_PER_FOLDER, len(folder_files)))
                             selected_files.extend(folder_selection)
 
                     # If we didn't get enough files from folders, add some random ones
-                    if len(selected_files) < 10 and files:
+                    if len(selected_files) < MAX_FILES_TO_FETCH and files:
                         additional_files = random.sample(
                             [f for f in files if f not in selected_files],
-                            min(10 - len(selected_files), len(files) - len(selected_files))
+                            min(MAX_FILES_TO_FETCH - len(selected_files), len(files) - len(selected_files))
                         )
                         selected_files.extend(additional_files)
 
                     return selected_files
 
             # Default: return random files from the entire bucket
-            return random.sample(files, min(25, len(files)))
+            return random.sample(files, min(MAX_FILES_TO_FETCH, len(files)))
         else:
             logger.warning("No files found in the bucket.")
             return []
@@ -99,6 +106,8 @@ def get_files_from_do_spaces():
         logger.error(f"Failed to fetch files from DigitalOcean Spaces: {e}")
         return []
 
+
+# Change 2: Modify the generate_sound_fragments function to add songs per station and check for duplicates
 def generate_sound_fragments():
     conn = get_connection()
     cursor = conn.cursor()
@@ -111,72 +120,111 @@ def generate_sound_fragments():
         return
 
     files = get_files_from_do_spaces()
-    selected_files = random.sample(files, min(25, len(files)))
 
-    for file_key in selected_files:
-        try:
-            now = datetime.now()
+    # Get existing files to avoid duplicates
+    cursor.execute("SELECT do_key FROM kneobroadcaster__sound_fragments WHERE do_key IS NOT NULL")
+    existing_files = {row[0] for row in cursor.fetchall()}
 
-            match = re.match(r'^\d+\.\s+(.*?)\s+-\s+(.*?)\.mp3$', file_key, re.IGNORECASE)
-            if match:
-                artist = match.group(1).strip()
-                title = match.group(2).strip()
-            else:
-                title = os.path.splitext(file_key)[0]
-                artist = fake.name()
+    # Filter out files that are already in the database
+    new_files = [f for f in files if f not in existing_files]
 
-            slug_name = slugify(title)
-            genre = fake.word()
-            album = fake.word()
-            loc_name = generate_loc_name(title, title, title)
-            add_info = {"source": "DigitalOcean Spaces"}
+    if not new_files:
+        logger.info("No new files found to process. All files have already been added.")
+        conn.close()
+        return
 
-            # Insert the file key into the do_key field
-            do_key = file_key
+    logger.info(f"Found {len(new_files)} new files to process out of {len(files)} total files.")
 
-            cursor.execute("""
-                INSERT INTO kneobroadcaster__sound_fragments 
-                (author, reg_date, last_mod_user, last_mod_date, source, status, type, title, artist, genre, album, loc_name, add_info, slug_name, do_key, archived)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
-            """, (
-                0, now, 0, now, "DIGITALOCEAN", 1, "SONG",
-                title, artist, genre, album, json.dumps(loc_name), json.dumps(add_info), slug_name, do_key, 0
-            ))
-            fragment_id = cursor.fetchone()[0]
+    # Each brand should get approximately SONGS_PER_BRAND songs
+    for brand_id in brand_ids:
+        # Count existing songs for this brand
+        cursor.execute("""
+            SELECT COUNT(*) FROM kneobroadcaster__brand_sound_fragments
+            WHERE brand_id = %s
+        """, (brand_id,))
+        existing_songs_count = cursor.fetchone()[0]
 
-            num_brands_to_associate = random.randint(1, min(20, len(brand_ids)))
-            selected_brand_ids = random.sample(brand_ids, num_brands_to_associate)
+        logger.info(f"Brand {brand_id} already has {existing_songs_count} songs.")
 
-            for brand_id in selected_brand_ids:
+        # Skip if the brand already has enough songs
+        if existing_songs_count >= SONGS_PER_BRAND:
+            logger.info(
+                f"Brand {brand_id} already has {existing_songs_count} songs, which is >= {SONGS_PER_BRAND}. Skipping.")
+            continue
+
+        # Calculate how many more songs we need to add
+        songs_to_add = min(SONGS_PER_BRAND - existing_songs_count, len(new_files))
+
+        if songs_to_add <= 0:
+            logger.info(f"No more songs needed for brand {brand_id}.")
+            continue
+
+        logger.info(f"Adding {songs_to_add} songs to brand {brand_id}.")
+
+        # Select random files for this brand
+        brand_files = random.sample(new_files, songs_to_add)
+
+        for file_key in brand_files:
+            try:
+                now = datetime.now()
+
+                match = re.match(r'^\d+\.\s+(.*?)\s+-\s+(.*?)\.mp3$', file_key, re.IGNORECASE)
+                if match:
+                    artist = match.group(1).strip()
+                    title = match.group(2).strip()
+                else:
+                    title = os.path.splitext(file_key)[0]
+                    artist = fake.name()
+
+                slug_name = slugify(title)
+                genre = fake.word()
+                album = fake.word()
+                loc_name = generate_loc_name(title, title, title)
+                add_info = {"source": "DigitalOcean Spaces"}
+
+                # Insert the file key into the do_key field
+                do_key = file_key
+
+                cursor.execute("""
+                    INSERT INTO kneobroadcaster__sound_fragments 
+                    (author, reg_date, last_mod_user, last_mod_date, source, status, type, title, artist, genre, album, loc_name, add_info, slug_name, do_key, archived)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
+                """, (
+                    0, now, 0, now, "DIGITALOCEAN", 1, "SONG",
+                    title, artist, genre, album, json.dumps(loc_name), json.dumps(add_info), slug_name, do_key, 0
+                ))
+                fragment_id = cursor.fetchone()[0]
+
+                # Associate this fragment with the current brand
                 cursor.execute("""
                     INSERT INTO kneobroadcaster__brand_sound_fragments 
                     (brand_id, sound_fragment_id, played_by_brand_count, last_time_played_by_brand)
                     VALUES (%s, %s, %s, %s)
                 """, (brand_id, fragment_id, 0, None))
 
-            cursor.execute("SELECT id FROM __labels ORDER BY RANDOM() LIMIT 1")
-            label = cursor.fetchone()
-            if label:
-                cursor.execute("""
-                    INSERT INTO kneobroadcaster__sound_fragment_labels 
-                    (id, label_id)
-                    VALUES (%s, %s)
-                """, (fragment_id, label[0]))
+                cursor.execute("SELECT id FROM __labels ORDER BY RANDOM() LIMIT 1")
+                label = cursor.fetchone()
+                if label:
+                    cursor.execute("""
+                        INSERT INTO kneobroadcaster__sound_fragment_labels 
+                        (id, label_id)
+                        VALUES (%s, %s)
+                    """, (fragment_id, label[0]))
 
-            cursor.execute("SELECT id FROM _users ORDER BY RANDOM() LIMIT 1")
-            reader = cursor.fetchone()
-            if reader:
-                cursor.execute("""
-                    INSERT INTO kneobroadcaster__sound_fragment_readers 
-                    (reader, entity_id, can_edit, can_delete, reading_time)
-                    VALUES (%s, %s, %s, %s, %s)
-                """, (reader[0], fragment_id, False, False, now))
+                cursor.execute("SELECT id FROM _users ORDER BY RANDOM() LIMIT 1")
+                reader = cursor.fetchone()
+                if reader:
+                    cursor.execute("""
+                        INSERT INTO kneobroadcaster__sound_fragment_readers 
+                        (reader, entity_id, can_edit, can_delete, reading_time)
+                        VALUES (%s, %s, %s, %s, %s)
+                    """, (reader[0], fragment_id, False, False, now))
 
-            add_superuser_permissions(cursor, fragment_id, "kneobroadcaster__sound_fragment_readers")
+                add_superuser_permissions(cursor, fragment_id, "kneobroadcaster__sound_fragment_readers")
 
-            logger.info(f"Sound fragment inserted for file: {file_key}")
-        except Exception as e:
-            logger.error(f"Error processing file {file_key}: {e}")
+                logger.info(f"Sound fragment inserted for file: {file_key} and brand: {brand_id}")
+            except Exception as e:
+                logger.error(f"Error processing file {file_key} for brand {brand_id}: {e}")
 
     conn.commit()
     cursor.close()
