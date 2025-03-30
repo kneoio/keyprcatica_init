@@ -1,0 +1,33 @@
+{
+  "scheduler": {
+    "id": "all_days_scheduler",
+    "timezone": "UTC",
+    "tasks": [
+      {
+        "id": "daily_report",
+        "type": "periodic",
+        "schedule": {
+          "trigger": {
+            "type": "time",
+            "start": "2024-01-01T08:00:00Z",
+            "end": "2024-12-31T08:00:00Z"
+          },
+          "frequency": {
+            "type": "daily",
+            "time_of_day": "08:00:00",
+            "weekdays": ["Monday"]
+          }
+        }
+      },
+      {
+        "id": "on_app_start",
+        "type": "triggered",
+        "trigger": {
+          "type": "event"
+        },
+        "duration": "PT30M",
+        "weekdays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+      }
+    ]
+  }
+}

@@ -174,7 +174,7 @@ def generate_sound_fragments():
                     title = match.group(2).strip()
                 else:
                     title = os.path.splitext(file_key)[0]
-                    artist = fake.name()
+                    artist = ""
 
                 slug_name = slugify(title)
                 genre = fake.word()
