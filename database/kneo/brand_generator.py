@@ -1,125 +1,127 @@
 import json
 from datetime import datetime
+from faker import Faker
+from slugify import slugify
 import random
-from util.logging import logger
+import colorsys
+
+from cnst.const import generate_loc_name
 from database import get_connection
+from cnst.country_codes import country_codes
+from util.logging import logger
 from util.permissions import add_superuser_permissions
 
-# Environment profiles data
-environments = {
-    "care_center": {
-        "description": "Focus on nostalgia, gentle volume, cognitive stimulation.",
-        "allowed_genres": ["oldies", "classical", "jazz", "folk"],
-        "announcement_frequency": "low",
-        "explicit_content": False,
-        "language": "POR"
-    },
-    "hospital": {
-        "description": "Calming selections, limited announcement volume, wellness themes.",
-        "allowed_genres": ["ambient", "classical", "light jazz", "new age"],
-        "announcement_frequency": "very_low",
-        "explicit_content": False
-    },
-    "school": {
-        "description": "Age-appropriate content, educational ties, energy management.",
-        "allowed_genres": ["pop", "educational", "children", "instrumental"],
-        "announcement_frequency": "medium",
-        "explicit_content": False
-    },
-    "car_workshop": {
-        "description": "Upbeat tempo, industry-appropriate language, ambient volume.",
-        "allowed_genres": ["rock", "classic rock", "country", "pop"],
-        "announcement_frequency": "medium",
-        "explicit_content": False
-    },
-    "mall": {
-        "description": "Family-friendly content, shopping-compatible tempo, promotional integration.",
-        "allowed_genres": ["pop", "easy listening", "soft rock", "ambient"],
-        "announcement_frequency": "high",
-        "explicit_content": False
-    },
-    "office": {
-        "description": "Work-appropriate selections, productivity focus, time-aware programming.",
-        "allowed_genres": ["ambient", "instrumental", "jazz", "classical", "lo-fi"],
-        "announcement_frequency": "low",
-        "explicit_content": False
-    },
-    "family_event": {
-        "description": "Occasion-specific content, all-ages appropriate, celebration themes.",
-        "allowed_genres": ["pop", "dance", "party", "classics", "contemporary"],
-        "announcement_frequency": "medium_high",
-        "explicit_content": False
-    },
-    "student_dorms": {
-        "description": "Contemporary selections, social connection themes, study-time awareness.",
-        "allowed_genres": ["pop", "electronic", "hip-hop", "rock", "indie"],
-        "announcement_frequency": "medium",
-        "explicit_content": False
-    }
-}
+fake = Faker()
+
+# List of static brand names that will always be inserted first
+STATIC_BRAND_NAMES = [
+    "Nunoscope",
+    "Aidazoo"
+]
 
 
-def generate_profiles():
+def generate_brand_color(brand_name):
+    """Generate a consistent color based on brand name hash"""
+    # Create a hash from the brand name
+    name_hash = hash(brand_name)
+
+    # Use the hash to generate consistent HSV values
+    h = (name_hash % 360) / 360.0  # Hue (0-1)
+    s = 0.7 + ((name_hash % 30) / 100.0)  # Saturation (0.7-1.0)
+    v = 0.5 + ((name_hash % 40) / 100.0)  # Value (0.5-0.9)
+
+    # Convert HSV to RGB
+    r, g, b = colorsys.hsv_to_rgb(h, s, v)
+
+    # Convert to hex color code
+    return "#{:02x}{:02x}{:02x}".format(int(r * 255), int(g * 255), int(b * 255))
+
+
+def generate_brands(count=10):
     conn = get_connection()
     cursor = conn.cursor()
-    now = datetime.now()
 
-    profile_ids = {}
+    # Calculate how many random brands we need after inserting static ones
+    static_count = min(len(STATIC_BRAND_NAMES), count)
+    remaining_count = max(count - static_count, 0)
 
-    # Create profiles
-    for name, profile_data in environments.items():
+    # First insert static brands (up to the requested count)
+    for i, brand_name in enumerate(STATIC_BRAND_NAMES[:static_count]):
         try:
-            language = profile_data.get("language", None)
+            now = datetime.now()
+            slug_name = slugify(brand_name)
+            loc_name = generate_loc_name(brand_name, brand_name, brand_name)
+            country = random.choice(country_codes)["name"]
+            color = generate_brand_color(brand_name)  # Generate brand color
+
             cursor.execute("""
-                INSERT INTO kneobroadcaster__profiles 
-                (author, reg_date, last_mod_user, last_mod_date, name, description, 
-                allowed_genres, announcement_frequency, explicit_content, language)
+                INSERT INTO kneobroadcaster__brands 
+                (author, reg_date, last_mod_user, last_mod_date, country, primary_lang, 
+                 loc_name, slug_name, archived, color)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
             """, (
-                0, now, 0, now,
-                name,
-                profile_data["description"],
-                json.dumps(profile_data["allowed_genres"]),
-                profile_data["announcement_frequency"],
-                profile_data["explicit_content"],
-                language
+                0, now, 0, now, country, 'eng',
+                json.dumps(loc_name), slug_name, 0, color
             ))
-            profile_id = cursor.fetchone()[0]
-            profile_ids[name] = profile_id
+            brand_id = cursor.fetchone()[0]
 
-            # Add superuser permissions
-            add_superuser_permissions(cursor, profile_id, "kneobroadcaster__profile_readers")
+            cursor.execute("SELECT id FROM _users ORDER BY RANDOM() LIMIT 1")
+            reader = cursor.fetchone()
+            if reader:
+                cursor.execute("""
+                    INSERT INTO kneobroadcaster__brand_readers 
+                    (reader, entity_id, can_edit, can_delete, reading_time)
+                    VALUES (%s, %s, %s, %s, %s)
+                """, (reader[0], brand_id, True, True, now))
 
-            logger.info(f"Profile created: {name}")
+            add_superuser_permissions(cursor, brand_id, "kneobroadcaster__brand_readers")
+
+            logger.info(f"Static brand {i + 1}/{static_count} inserted with name: {brand_name}")
+            conn.commit()  # Commit after each successful brand insertion
         except Exception as e:
-            logger.error(f"Error creating profile {name}: {e}")
+            logger.error(f"Error inserting static brand {i + 1}: {e}")
+            conn.rollback()  # Rollback on error to prevent transaction abortion
+            continue  # Continue to next brand instead of failing completely
 
-    # Assign profiles to brands randomly
-    try:
-        cursor.execute("SELECT id FROM kneobroadcaster__brands")
-        brands = cursor.fetchall()
-
-        for brand in brands:
-            brand_id = brand[0]
-            # Choose a random profile
-            random_profile_name = random.choice(list(profile_ids.keys()))
-            profile_id = profile_ids[random_profile_name]
+    # Then insert remaining random brands if needed
+    for i in range(remaining_count):
+        try:
+            now = datetime.now()
+            brand_name = fake.company()
+            slug_name = slugify(brand_name)
+            loc_name = generate_loc_name(brand_name, brand_name, brand_name)
+            country = random.choice(country_codes)["name"]
+            color = generate_brand_color(brand_name)  # Generate brand color
 
             cursor.execute("""
-                UPDATE kneobroadcaster__brands
-                SET profile_id = %s
-                WHERE id = %s
-            """, (profile_id, brand_id))
+                INSERT INTO kneobroadcaster__brands 
+                (author, reg_date, last_mod_user, last_mod_date, country, primary_lang, 
+                 loc_name, slug_name, archived, color)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
+            """, (
+                0, now, 0, now, country, 'eng',
+                json.dumps(loc_name), slug_name, 0, color
+            ))
+            brand_id = cursor.fetchone()[0]
 
-            logger.info(f"Brand {brand_id} assigned profile: {random_profile_name}")
-    except Exception as e:
-        logger.error(f"Error assigning profiles to brands: {e}")
+            cursor.execute("SELECT id FROM _users ORDER BY RANDOM() LIMIT 1")
+            reader = cursor.fetchone()
+            if reader:
+                cursor.execute("""
+                    INSERT INTO kneobroadcaster__brand_readers 
+                    (reader, entity_id, can_edit, can_delete, reading_time)
+                    VALUES (%s, %s, %s, %s, %s)
+                """, (reader[0], brand_id, True, True, now))
 
-    conn.commit()
+            add_superuser_permissions(cursor, brand_id, "kneobroadcaster__brand_readers")
+
+            logger.info(f"Random brand {i + 1}/{remaining_count} inserted with name: {brand_name}")
+            conn.commit()  # Commit after each successful brand insertion
+        except Exception as e:
+            logger.error(f"Error inserting random brand {i + 1}: {e}")
+            conn.rollback()  # Rollback on error to prevent transaction abortion
+            continue  # Continue to next brand instead of failing completely
+
     cursor.close()
     conn.close()
-    logger.info("Finished generating profiles and assigning to brands.")
-
-
-if __name__ == "__main__":
-    generate_profiles()
+    logger.info(f"Finished inserting brands. Total: {count} (Static: {static_count}, Random: {remaining_count})")

@@ -81,15 +81,14 @@ def generate_profiles():
             cursor.execute("""
                 INSERT INTO kneobroadcaster__profiles 
                 (author, reg_date, last_mod_user, last_mod_date, name, description, 
-                allowed_genres, announcement_frequency, volume_level, explicit_content, language)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
+                allowed_genres, announcement_frequency, explicit_content, language)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
             """, (
                 0, now, 0, now,
                 name,
                 profile_data["description"],
                 json.dumps(profile_data["allowed_genres"]),
                 profile_data["announcement_frequency"],
-                profile_data["volume_level"],
                 profile_data["explicit_content"],
                 language
             ))
