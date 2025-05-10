@@ -15,8 +15,12 @@ fake = Faker()
 
 # List of static brand names that will always be inserted first
 STATIC_BRAND_NAMES = [
-    "Nunoscope",
-    "Aidazoo"
+    "nunoscope",
+    "aidazoo"
+    "nitroglycerin"
+    "fock-fock"
+    "klentara"
+    "enacone"
 ]
 
 
@@ -57,11 +61,12 @@ def generate_brands(count=10):
             cursor.execute("""
                 INSERT INTO kneobroadcaster__brands 
                 (author, reg_date, last_mod_user, last_mod_date, country, primary_lang, 
-                 loc_name, slug_name, archived, color)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
+                 loc_name, slug_name, archived, color, schedule, ai_agent)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
             """, (
                 0, now, 0, now, country, 'eng',
-                json.dumps(loc_name), slug_name, 0, color
+                json.dumps(loc_name), slug_name, 0, color,
+                json.dumps({}), json.dumps({})  # New fields with empty JSON objects
             ))
             brand_id = cursor.fetchone()[0]
 
@@ -96,11 +101,12 @@ def generate_brands(count=10):
             cursor.execute("""
                 INSERT INTO kneobroadcaster__brands 
                 (author, reg_date, last_mod_user, last_mod_date, country, primary_lang, 
-                 loc_name, slug_name, archived, color)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
+                 loc_name, slug_name, archived, color, schedule, ai_agent)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
             """, (
                 0, now, 0, now, country, 'eng',
-                json.dumps(loc_name), slug_name, 0, color
+                json.dumps(loc_name), slug_name, 0, color,
+                json.dumps({}), json.dumps({})  # New fields with empty JSON objects
             ))
             brand_id = cursor.fetchone()[0]
 
