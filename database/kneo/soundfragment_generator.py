@@ -179,6 +179,9 @@ def generate_sound_fragments():
                         artist = match.group(1).strip() if match else ""
                         title = match.group(2).strip() if match else os.path.splitext(filename)[0]
 
+                        if artist and artist.isdigit():
+                            artist = ""
+
                         # Skip duplicates
                         song_key = (artist.lower(), title.lower())
                         if song_key in existing_songs:

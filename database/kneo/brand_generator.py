@@ -16,11 +16,11 @@ fake = Faker()
 # List of static brand names that will always be inserted first
 STATIC_BRAND_NAMES = [
     "nunoscope",
-    "aidazoo"
-    "nitroglycerin"
-    "fock-fock"
-    "klentara"
-    "enacone"
+    "aidazoo",
+    "nitroglycerin",
+    "fock-fock",
+    "klentara",
+    "enacone",
 ]
 
 
