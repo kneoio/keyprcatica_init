@@ -14,8 +14,9 @@ from database import get_connection
 from util.logging import logger
 from util.permissions import add_superuser_permissions
 
-BRAND_SLUG = "nunoscope"
-SONGS_TO_ADD = 60
+BRAND_SLUG = "nitroglycerin"
+SONGS_TO_ADD = 500
+
 
 BRAND_PREFERRED_FOLDERS = ["suno", "2", "3", "6", "7", "8"]
 
