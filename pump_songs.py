@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 from cnst.const import generate_loc_name
 from database import get_connection
 from util.logging import logger
-from util.permissions import add_superuser_permissions
+from util.permissions import add_default_superuser_permissions
 
 BRAND_SLUG = "nitroglycerin"
 SONGS_TO_ADD = 500
@@ -227,7 +227,7 @@ def add_songs_to_brand(brand_slug):
                          logger.warning(f"Failed to add random reader for fragment {fragment_id}: {reader_e}")
 
 
-                add_superuser_permissions(cursor, fragment_id, "kneobroadcaster__sound_fragment_readers")
+                add_default_superuser_permissions(cursor, fragment_id, "kneobroadcaster__sound_fragment_readers")
 
                 logger.info(f"Added song fragment for file '{filename}' from folder '{folder}' (ID: {fragment_id}).")
                 added_count += 1

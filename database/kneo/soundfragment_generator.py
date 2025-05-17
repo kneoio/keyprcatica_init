@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from cnst.const import generate_loc_name
 from database import get_connection
 from util.logging import logger
-from util.permissions import add_superuser_permissions
+from util.permissions import add_default_superuser_permissions
 
 fake = Faker()
 
@@ -215,7 +215,7 @@ def generate_sound_fragments():
                         """, (brand_id, fragment_id, 0, None))
 
                         # Add permissions
-                        add_superuser_permissions(cursor, fragment_id, "kneobroadcaster__sound_fragment_readers")
+                        add_default_superuser_permissions(cursor, fragment_id, "kneobroadcaster__sound_fragment_readers")
 
                         # Update tracking sets
                         existing_files.add(file_key)
@@ -304,7 +304,7 @@ def generate_sound_fragments():
                         """, (brand_id, fragment_id, 0, None))
 
                         # Add permissions
-                        add_superuser_permissions(cursor, fragment_id, "kneobroadcaster__sound_fragment_readers")
+                        add_default_superuser_permissions(cursor, fragment_id, "kneobroadcaster__sound_fragment_readers")
 
                         # Update tracking sets
                         existing_files.add(file_key)

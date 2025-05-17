@@ -3,7 +3,7 @@ from datetime import datetime
 import random
 from util.logging import logger
 from database import get_connection
-from util.permissions import add_superuser_permissions
+from util.permissions import add_default_superuser_permissions
 
 # Environment profiles data
 environments = {
@@ -96,7 +96,7 @@ def generate_profiles():
             profile_ids[name] = profile_id
 
             # Add superuser permissions
-            add_superuser_permissions(cursor, profile_id, "kneobroadcaster__profile_readers")
+            add_default_superuser_permissions(cursor, profile_id, "kneobroadcaster__profile_readers")
 
             logger.info(f"Profile created: {name}")
         except Exception as e:

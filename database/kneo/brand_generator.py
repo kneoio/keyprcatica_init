@@ -9,7 +9,7 @@ from cnst.const import generate_loc_name
 from database import get_connection
 from cnst.country_codes import country_codes
 from util.logging import logger
-from util.permissions import add_superuser_permissions
+from util.permissions import add_default_superuser_permissions
 
 fake = Faker()
 
@@ -89,7 +89,7 @@ def generate_brands(count=10):
                     VALUES (%s, %s, %s, %s, %s)
                 """, (reader_id, brand_id, True, True, now))
 
-            add_superuser_permissions(cursor, brand_id, "kneobroadcaster__brand_readers")
+            add_default_superuser_permissions(cursor, brand_id, "kneobroadcaster__brand_readers")
 
             logger.info(
                 f"Static brand {i + 1}/{static_count} inserted with name: {brand_name}, AI Agent: {ai_agent_name}")

@@ -8,7 +8,7 @@ from cnst.const import generate_loc_name
 from database import get_connection
 from cnst.country_codes import country_codes
 from util.logging import logger
-from util.permissions import add_superuser_permissions
+from util.permissions import add_default_superuser_permissions
 
 
 fake = Faker()
@@ -96,7 +96,7 @@ def generate_listeners(count=10):
             ))
 
             # Add superuser permissions
-            add_superuser_permissions(cursor, listener_id, "kneobroadcaster__listener_readers")
+            add_default_superuser_permissions(cursor, listener_id, "kneobroadcaster__listener_readers")
 
             logger.info(f"Listener {i + 1}/{count} inserted with name: {listener_name}")
         except Exception as e:

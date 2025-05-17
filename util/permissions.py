@@ -1,6 +1,6 @@
 from datetime import datetime
 
-def add_superuser_permissions(cursor, entity_id, table_name):
+def add_default_superuser_permissions(cursor, entity_id, table_name):
     now = datetime.now()
     cursor.execute(f"""
         INSERT INTO {table_name} (reader, entity_id, can_edit, can_delete, reading_time)
