@@ -5,72 +5,83 @@ from cnst.const import generate_loc_name
 
 labels = [
     {
-        "identifier": "rock",
-        "color": "#FF5733",
-        "category": "genre",
-        "loc_name": generate_loc_name("Rock", "Rock", "Рок")
+        "identifier": "suno",
+        "color": "#FF8C00",
+        "category": "platform",
+        "loc_name": generate_loc_name("Suno", "Suno", "Suno")
     },
     {
-        "identifier": "pop",
-        "color": "#FFC300",
-        "category": "genre",
-        "loc_name": generate_loc_name("Pop", "Pop", "Поп")
+        "identifier": "jingle",
+        "color": "#4682B4",
+        "category": "audio_type",
+        "loc_name": generate_loc_name("Jingle", "Jingle", "Джингл")
     },
     {
-        "identifier": "jazz",
-        "color": "#900C3F",
-        "category": "genre",
-        "loc_name": generate_loc_name("Jazz", "Jazz", "Джаз")
+        "identifier": "speech",
+        "color": "#32CD32",
+        "category": "audio_type",
+        "loc_name": generate_loc_name("Speech", "Discurso", "Речь")
     },
     {
-        "identifier": "electronic",
-        "color": "#581845",
-        "category": "genre",
-        "loc_name": generate_loc_name("Electronic", "Electrónica", "Электронды")
+        "identifier": "jamendo",
+        "color": "#9370DB",
+        "category": "platform",
+        "loc_name": generate_loc_name("Jamendo", "Jamendo", "Jamendo")
     },
     {
-        "identifier": "classical",
-        "color": "#1D8348",
-        "category": "genre",
-        "loc_name": generate_loc_name("Classical", "Clássica", "Классикалық")
-    },
-    {
-        "identifier": "hiphop",
-        "color": "#2E86C1",
-        "category": "genre",
-        "loc_name": generate_loc_name("Hip Hop", "Hip Hop", "Хип-хоп")
-    },
-    {
-        "identifier": "reggae",
-        "color": "#27AE60",
-        "category": "genre",
-        "loc_name": generate_loc_name("Reggae", "Reggae", "Регги")
+        "identifier": "censored",
+        "color": "#DC143C",
+        "category": "content_status",
+        "loc_name": generate_loc_name("Censored", "Censurado", "Под цензурой")
     }
 ]
 
+
 def generate_labels():
-    conn = get_connection()
-    cursor = conn.cursor()
+    conn = None
+    cursor = None
+    try:
+        conn = get_connection()
+        if conn is None:
+            logger.error("Failed to get database connection for __labels. Aborting.")
+            return
+        cursor = conn.cursor()
 
-    for label in labels:
-        try:
-            loc_name_json = json.dumps(label["loc_name"])
-            cursor.execute("""
-                INSERT INTO __labels (author, last_mod_user, identifier, color, category, loc_name)
-                VALUES (%s, %s, %s, %s, %s, %s)
-            """, (
-                0,
-                0,
-                label["identifier"],
-                label["color"],
-                label["category"],
-                loc_name_json
-            ))
-            logger.info(f"Label '{label['identifier']}' inserted with translations.")
-        except Exception as e:
-            logger.error(f"Error inserting label '{label['identifier']}': {e}")
+        logger.info("Starting to insert new labels into __labels table...")
 
-    conn.commit()
-    cursor.close()
-    conn.close()
-    logger.info("Finished inserting labels.")
+        for label_data in labels:
+            try:
+                loc_name_json = json.dumps(label_data["loc_name"])
+
+                cursor.execute("""
+                    INSERT INTO __labels (author, last_mod_user, identifier, color, category, loc_name)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """, (
+                    0,
+                    0,
+                    label_data["identifier"],
+                    label_data["color"],
+                    label_data["category"],
+                    loc_name_json
+                ))
+                logger.info(f"Label '{label_data['identifier']}' inserted into __labels.")
+            except Exception as e:
+                logger.error(f"Error inserting label '{label_data['identifier']}' into __labels: {e}")
+
+        conn.commit()
+        logger.info(f"Finished inserting {len(labels)} new labels into __labels.")
+
+    except Exception as e:
+        logger.error(f"Major error during __labels generation: {e}")
+        if conn:
+            conn.rollback()
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+        logger.info("Finished __labels generation process.")
+
+
+if __name__ == "__main__":
+    generate_labels_new()

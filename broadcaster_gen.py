@@ -1,4 +1,5 @@
 from database.kneo.brand_generator import generate_brands
+from database.kneo.genres_generator import generate_genres
 from database.kneo.listener_generator import generate_listeners
 from database.kneo.music_label_generator import generate_labels
 from database.kneo.soundfragment_generator import generate_sound_fragments
@@ -10,3 +11,4 @@ if __name__ == "__main__":
     generate_listeners()
     generate_sound_fragments()
     generate_profiles()
+    generate_genres()

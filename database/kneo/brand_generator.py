@@ -141,7 +141,7 @@ def generate_brands(count=10):
                     VALUES (%s, %s, %s, %s, %s)
                 """, (reader_id, brand_id, True, True, now))
 
-            add_superuser_permissions(cursor, brand_id, "kneobroadcaster__brand_readers")
+            add_default_superuser_permissions(cursor, brand_id, "kneobroadcaster__brand_readers")
 
             logger.info(
                 f"Random brand {i + 1}/{remaining_count} inserted with name: {brand_name}, AI Agent: {ai_agent_name}")  # MODIFIED LOG

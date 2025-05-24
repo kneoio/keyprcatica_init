@@ -16,7 +16,8 @@ def delete_data():
             "kneobroadcaster__sound_fragment_readers",
             "kneobroadcaster__sound_fragments",
             "kneobroadcaster__profile_readers",
-            "kneobroadcaster__profiles"
+            "kneobroadcaster__profiles",
+            "kneobroadcaster__genres"
         ]
 
         for table in tables:
