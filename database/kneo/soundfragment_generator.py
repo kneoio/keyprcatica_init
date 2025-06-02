@@ -43,6 +43,22 @@ STATIC_BRAND_CONFIG = {
     "enacone": ["4", "5"],
 }
 
+def _upload_to_spaces(file_path: str, destination_key: str) -> bool:
+    """Upload file to DO Spaces"""
+    try:
+        s3_session = boto3.session.Session()
+        s3_client = s3_session.client(
+            's3', 
+            region_name=region, 
+            endpoint_url=f"https://{endpoint}",
+            aws_access_key_id=access_key, 
+            aws_secret_access_key=secret_key
+        )
+        s3_client.upload_file(file_path, bucket_name, destination_key)
+        return True
+    except Exception as e:
+        logger.error(f"Failed to upload {file_path} to DO Spaces: {e}")
+        return False
 
 def get_files_from_do_spaces(brand_slug=None):
     try:
@@ -108,7 +124,6 @@ def get_files_from_do_spaces(brand_slug=None):
         logger.error(f"Failed to fetch files: {e}")
         return []
 
-
 def generate_sound_fragments():
     conn = get_connection()
     cursor = conn.cursor()
@@ -139,7 +154,8 @@ def generate_sound_fragments():
         existing_songs = set()
         cursor.execute("SELECT LOWER(artist), LOWER(title) FROM kneobroadcaster__sound_fragments")
         for row in cursor.fetchall(): existing_songs.add((row[0], row[1]))
-        cursor.execute("SELECT do_key FROM kneobroadcaster__sound_fragments WHERE do_key IS NOT NULL")
+        
+        cursor.execute("SELECT file_key FROM _files WHERE parent_table = 'kneobroadcaster__sound_fragments'")
         existing_files = {row[0] for row in cursor.fetchall()}
 
         brands_to_process = [("static", brand_id, slug) for brand_id, slug in static_brands] + \
@@ -245,20 +261,33 @@ def generate_sound_fragments():
                         loc_name = generate_loc_name(final_title, final_title, final_title)
                         add_info_value = json.dumps({"source": "Imported"})
 
+                        # First insert the sound fragment record
                         cursor.execute("""
-                            INSERT INTO kneobroadcaster__sound_fragments 
-                            (author, reg_date, last_mod_user, last_mod_date, source, status, type, 
-                             title, artist, genre, album, loc_name, add_info, slug_name, do_key, archived, mime_type)
-                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                            RETURNING id
-                        """, (
-                            0, now, 0, now, "DIGITALOCEAN", 1, "SONG",
+                                INSERT INTO kneobroadcaster__sound_fragments 
+                                (author, reg_date, last_mod_user, last_mod_date, source, status, type, 
+                                 title, artist, genre, album, loc_name, add_info, slug_name, archived)
+                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                                RETURNING id
+                            """, (
+                            0, now, 0, now, "USERS_UPLOAD", 1, "SONG",
                             final_title, final_artist, "electronic", final_album,
                             json.dumps(loc_name),
                             add_info_value,
-                            song_slug, file_key, 0, mime_type
+                            song_slug, 0
                         ))
                         fragment_id = cursor.fetchone()[0]
+
+                        # Then insert the file record
+                        cursor.execute("""
+                                INSERT INTO _files 
+                                (reg_date, last_mod_date, parent_table, parent_id, archived,
+                                storage_type, mime_type, slug_name, file_original_name, file_key)
+                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            """, (
+                            now, now, 
+                            'kneobroadcaster__sound_fragments', fragment_id, 0,
+                            'DIGITAL_OCEAN', mime_type, song_slug, filename, file_key
+                        ))
 
                         cursor.execute("""
                             INSERT INTO kneobroadcaster__brand_sound_fragments 
@@ -296,7 +325,6 @@ def generate_sound_fragments():
         if cursor: cursor.close()
         if conn: conn.close()
     logger.info("\nFinished processing all brands")
-
 
 if __name__ == "__main__":
     generate_sound_fragments()

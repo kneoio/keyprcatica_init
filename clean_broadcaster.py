@@ -12,6 +12,7 @@ def delete_data():
             "kneobroadcaster__listeners",
             "kneobroadcaster__brand_readers",
             "kneobroadcaster__brands",
+            "_files",
             "__labels",
             "kneobroadcaster__sound_fragment_readers",
             "kneobroadcaster__sound_fragments",

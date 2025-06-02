@@ -4,16 +4,16 @@ from util.logging import logger  # Assuming you have this module
 import uuid  # Assuming you have this module
 
 TABLE_PROCESSING_CONFIG = [
-    #{"table": "kneobroadcaster__sound_fragments", "ids": ["11ef0bf3-ff5e-40b6-84d5-a861b0814e9e"]},
-    {"table": "kneobroadcaster__sound_brands", "ids": []},
+    {"table": "kneobroadcaster__sound_fragments", "ids": []},
+    #{"table": "kneobroadcaster__sound_brands", "ids": []},
 ]
 
 READ_ONLY_USER_IDS = [
-    5, 6
+    1, 5, 6
 ]
 
 CAN_EDIT_USER_IDS = [
-    5, 6
+    1, 5, 6
 ]
 
 CAN_DELETE_USER_IDS = [

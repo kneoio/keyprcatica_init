@@ -9,6 +9,6 @@ if __name__ == "__main__":
     generate_labels()
     generate_brands()
     generate_listeners()
-    generate_sound_fragments()
     generate_profiles()
     generate_genres()
+    #generate_sound_fragments()
