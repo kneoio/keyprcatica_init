@@ -14,11 +14,11 @@ from database import get_connection
 from util.logging import logger
 from util.permissions import add_default_superuser_permissions
 
-BRAND_SLUG = "nitroglycerin"
+BRAND_SLUG = "enacone"
 SONGS_TO_ADD = 500
 
 
-BRAND_PREFERRED_FOLDERS =  ["house"]
+BRAND_PREFERRED_FOLDERS =  ["suno", "music"]
 
 MAX_FILES_PER_FOLDER = 1000
 MAX_FETCH_POOL_SIZE = 100

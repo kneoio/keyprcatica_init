@@ -3,7 +3,7 @@ from database import get_connection
 from util.logging import logger
 from cnst.const import generate_loc_name  # Import the centralized language constants and helper function
 
-# Predefined modules with loc_name and loc_descr translated into ENG, POR, KAZ
+# Predefined modules with loc_name and loc_descr translated into eng, por, kaz
 modules = [
     {
         "identifier": "core",

@@ -1,3 +1,4 @@
+from database.kneo.ai_agent_generator import populate_ai_agents
 from database.kneo.brand_generator import generate_brands
 from database.kneo.genres_generator import generate_genres
 from database.kneo.listener_generator import generate_listeners
@@ -7,6 +8,7 @@ from database.kneo.profile_generator import generate_profiles
 
 if __name__ == "__main__":
     generate_labels()
+    populate_ai_agents()
     generate_brands()
     generate_listeners()
     generate_profiles()

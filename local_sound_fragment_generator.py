@@ -22,7 +22,7 @@ load_dotenv()
 
 # Configuration
 SONGS_PER_BRAND = 50  # Maximum number of songs to add per brand
-SUPPORTED_EXTENSIONS = {'.mp3', '.wav'}
+SUPporTED_EXTENSIONS = {'.mp3', '.wav'}
 BATCH_SIZE = 10  # Number of files to process in one batch
 
 
@@ -48,7 +48,7 @@ class LocalSoundFragmentGenerator:
                 user=os.getenv('DB_USER'),
                 password=os.getenv('DB_PASSWORD'),
                 host=os.getenv('DB_HOST'),
-                port=os.getenv('DB_PORT')
+                port=os.getenv('DB_porT')
             )
         except Exception as e:
             logger.error(f"Failed to connect to database: {e}")
@@ -57,7 +57,7 @@ class LocalSoundFragmentGenerator:
     def _get_audio_files(self) -> List[Path]:
         """Recursively collect all supported audio files from the music directory"""
         audio_files = []
-        for ext in SUPPORTED_EXTENSIONS:
+        for ext in SUPporTED_EXTENSIONS:
             audio_files.extend(self.music_path.rglob(f"*{ext}"))
         return audio_files
 

@@ -11,7 +11,7 @@ AI_AGENT_DATA_EXAMPLES = [
         "name": "Glo",
         "preferred_lang": "eng",
         "main_prompt": "You are DJ Nova, an upbeat and energetic host for a dance music radio station. Keep the vibe positive and exciting.",
-        "preferred_voice": ["alloy", "shimmer"],
+        "preferred_voice": [{"id":"alloy"},{"id":"shimmer"}],
         "enabled_tools": [
             {"name": "Song Request Tool", "variable_name": "find_song", "description": "Finds and queues a song based on listener request."}
         ],
@@ -21,7 +21,7 @@ AI_AGENT_DATA_EXAMPLES = [
         "name": "Veenuo",
         "preferred_lang": "eng",
         "main_prompt": "You are Alex, a professional and authoritative news anchor. Deliver the news clearly, concisely, and with impartiality.",
-        "preferred_voice": ["echo", "onyx"],
+        "preferred_voice": [{"id":"echo"},{"id":"onyx"}],
         "enabled_tools": [
             {"name": "Current Headlines API", "variable_name": "get_headlines", "description": "Fetches the latest news headlines from a trusted source."}
         ],
@@ -31,7 +31,7 @@ AI_AGENT_DATA_EXAMPLES = [
         "name": "Nixeno",
         "preferred_lang": "por",
         "main_prompt": "É a Sofia, uma narradora de contos infantis com uma voz calma e cativante. As suas histórias devem ser mágicas e adequadas para crianças.",
-        "preferred_voice": ["nova", "fable"],
+        "preferred_voice": [{"id":"nova"},{"id":"onyx"}],
         "enabled_tools": [],
         "voice": {"id": "voice_LcfcDJNUP1GQjkzn1xUU"},
     },
@@ -39,7 +39,7 @@ AI_AGENT_DATA_EXAMPLES = [
         "name": "Clentara",
         "preferred_lang": "eng",
         "main_prompt": "You are Wendy, a friendly and helpful weather bot. Provide weather forecasts in a cheerful and easy-to-understand manner.",
-        "preferred_voice": ["shimmer"],
+        "preferred_voice": [{"id":"echo"}],
         "enabled_tools": [
             {"name": "Global Weather API", "variable_name": "get_weather_forecast", "description": "Provides detailed weather forecasts for any location."}
         ],

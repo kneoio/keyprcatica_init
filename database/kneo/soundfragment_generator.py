@@ -37,7 +37,7 @@ MIME_DETECTION_READ_BYTES = 2048
 STATIC_BRAND_CONFIG = {
     #"nunoscope": ["suno", "2", "3", "6", "7", "8"],
     #"aidazoo": ["suno", "2", "3", "4", "5", "6", "7", "8"],
-    "nitroglycerin": ["house"],
+    "nitroglycerin": ["suno", "music"],
     #"fock-fock": ["suno", "6", "7", "8"],
     #"klentara": ["suno", "2", "3", "4", "5", "6", "7", "8"],
     #"enacone": ["4", "5"],
