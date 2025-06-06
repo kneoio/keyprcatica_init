@@ -41,7 +41,7 @@ def generate_unique_ai_name():
     return name
 
 
-def generate_brands(count=10):
+def generate_brands(count=6):
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -73,7 +73,7 @@ def generate_brands(count=10):
                  loc_name, slug_name, archived, color, schedule, ai_agent)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
             """, (
-                0, now, 0, now, country, 'eng',
+                0, now, 0, now, country, 'ENG',
                 json.dumps(loc_name), slug_name, 0, color,
                 json.dumps({}), json.dumps(ai_agent_data)
             ))
@@ -125,7 +125,7 @@ def generate_brands(count=10):
                  loc_name, slug_name, archived, color, schedule, ai_agent)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
             """, (
-                0, now, 0, now, country, 'eng',
+                0, now, 0, now, country, 'ENG',
                 json.dumps(loc_name), slug_name, 0, color,
                 json.dumps({}), json.dumps(ai_agent_data)
             ))

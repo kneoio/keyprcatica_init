@@ -11,4 +11,4 @@ if __name__ == "__main__":
     generate_listeners()
     generate_profiles()
     generate_genres()
-    #generate_sound_fragments()
+    generate_sound_fragments()

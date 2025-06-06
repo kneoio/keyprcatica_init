@@ -18,7 +18,7 @@ BRAND_SLUG = "nitroglycerin"
 SONGS_TO_ADD = 500
 
 
-BRAND_PREFERRED_FOLDERS = ["suno", "2", "3", "6", "7", "8"]
+BRAND_PREFERRED_FOLDERS =  ["house"]
 
 MAX_FILES_PER_FOLDER = 1000
 MAX_FETCH_POOL_SIZE = 100
@@ -56,8 +56,8 @@ def get_files_from_do_spaces():
         if 'Contents' in response:
             for obj in response['Contents']:
                 key = obj['Key']
-                if not key.endswith('/') and key.lower().endswith(('.mp3', '.wav')):
-                    all_audio_files.append(key)
+                #if not key.endswith('/') and key.lower().endswith(('.mp3', '.wav')):
+                all_audio_files.append(key)
 
         if not all_audio_files:
             logger.warning("No audio files found in the bucket.")
@@ -190,7 +190,7 @@ def add_songs_to_brand(brand_slug):
                      title, artist, genre, album, loc_name, add_info, slug_name, do_key, archived)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
                 """, (
-                    0, now, 0, now, "DIGITALOCEAN", 1, "SONG",
+                    0, now, 0, now, "USERS_UPLOAD", 1, "SONG",
                     title, artist, genre, album, json.dumps(loc_name), json.dumps(add_info), slug_name, file_key, 0
                 ))
                 fragment_id = cursor.fetchone()[0]

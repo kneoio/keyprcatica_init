@@ -35,12 +35,12 @@ NUM_FOLDERS_TO_SELECT = 3
 MIME_DETECTION_READ_BYTES = 2048
 
 STATIC_BRAND_CONFIG = {
-    "nunoscope": ["suno", "2", "3", "6", "7", "8"],
-    "aidazoo": ["suno", "2", "3", "4", "5", "6", "7", "8"],
-    "nitroglycerin": ["suno", "2", "3", "6", "7", "8"],
-    "fock-fock": ["suno", "6", "7", "8"],
-    "klentara": ["suno", "2", "3", "4", "5", "6", "7", "8"],
-    "enacone": ["4", "5"],
+    #"nunoscope": ["suno", "2", "3", "6", "7", "8"],
+    #"aidazoo": ["suno", "2", "3", "4", "5", "6", "7", "8"],
+    "nitroglycerin": ["house"],
+    #"fock-fock": ["suno", "6", "7", "8"],
+    #"klentara": ["suno", "2", "3", "4", "5", "6", "7", "8"],
+    #"enacone": ["4", "5"],
 }
 
 def _upload_to_spaces(file_path: str, destination_key: str) -> bool:
