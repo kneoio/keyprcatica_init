@@ -11,17 +11,16 @@ from util.logging import logger
 AI_AGENT_DATA_EXAMPLES = [
     {
         "name": "Glo",
-        "preferred_lang": "eng",
+        "preferred_lang": "en",
         "main_prompt": "You are a radio DJ for {brand}. Introduce {song_title} by {artist}. Connect with our audience, like {listeners}. Consider the current context: {context}. Keep your introduction short (10-30 words). Make sure your introduction flows naturally from previous interactions. Previous interactions context: {history}",
         "preferred_voice": [{"id":"nPczCjzI2devNBz1zQrb","name":"Brain"},{"id":"CwhRBWXzGAHq8TQ4Fs17","name":"Roger"}],
         "enabled_tools": [
             {"name": "Song Request Tool", "variable_name": "find_song", "description": "Finds and queues a song based on listener request."}
         ],
-        "voice": {"id": "voice_fMInbTRlFcbAU4mKeeIq"},
     },
     {
         "name": "Veenuo",
-        "preferred_lang": "eng",
+        "preferred_lang": "en",
         "main_prompt": "You are a radio DJ for {brand}. Introduce {song_title} by {artist}. Connect with our audience, like {listeners}. Consider the current context: {context}. Keep your introduction short (10-30 words). Make sure your introduction flows naturally from previous interactions. Previous interactions context: {history}",
         "preferred_voice": [{"id": "TX3LPaxmHKxFdv7VOQHJ","name": "Liam"},{"id": "cjVigY5qzO86Huf0OWal","name": "Eric"}],
         "enabled_tools": [
@@ -30,14 +29,14 @@ AI_AGENT_DATA_EXAMPLES = [
     },
     {
         "name": "Nixeno",
-        "preferred_lang": "eng",
+        "preferred_lang": "en",
         "main_prompt": "You are a radio DJ for {brand}. Introduce {song_title} by {artist}. Connect with our audience, like {listeners}. Consider the current context: {context}. Keep your introduction short (10-30 words). Make sure your introduction flows naturally from previous interactions. Previous interactions context: {history}",
         "preferred_voice": [{"id":"nPczCjzI2devNBz1zQrb","name":"Brain"},{"id":"CwhRBWXzGAHq8TQ4Fs17","name":"Roger"}],
         "enabled_tools": []
     },
     {
         "name": "Ze",
-        "preferred_lang": "por",
+        "preferred_lang": "pt",
         "main_prompt": "És o DJ da rádio {brand}. Apresenta a música {song_title} de {artist}, criando ligação com a nossa audiência, os {listeners}. Considera o contexto atual: {context}. Mantém a introdução curta (10-30 palavras). Garante que flui naturalmente das interações anteriores. Contexto de interações prévias: {history}",
         "preferred_voice": [{"id": "aLFUti4k8YKvtQGXv0UO","name": "Paulo"}],
         "enabled_tools": [
@@ -46,7 +45,7 @@ AI_AGENT_DATA_EXAMPLES = [
     },
     {
         "name": "Nestor",
-        "preferred_lang": "rus",
+        "preferred_lang": "ru",
         "main_prompt": "Вы — диджей радио {brand}. Представьте трек «{song_title}» от {artist}, установив контакт с аудиторией ({listeners}). Учитывайте контекст: {context}. Делайте анонс коротким (10-30 слов) и естественно вписывающимся в предыдущие реплики. Контекст прошлых взаимодействий: {history}.",
         "preferred_voice": [{"id": "0BcDz9UPwL3MpsnTeUlO","name": "Denis"}],
         "enabled_tools": [
@@ -80,12 +79,11 @@ def populate_ai_agents():
 
             preferred_voice_json = json.dumps(agent_data["preferred_voice"])
             enabled_tools_json = json.dumps(agent_data["enabled_tools"])
-            voice_json = json.dumps(agent_data["voice"])
 
             cursor.execute("""
                 INSERT INTO kneobroadcaster__ai_agents
-                (author, reg_date, last_mod_user, last_mod_date, name, preferred_lang, main_prompt, preferred_voice, enabled_tools, voice, archived)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                (author, reg_date, last_mod_user, last_mod_date, name, preferred_lang, main_prompt, preferred_voice, enabled_tools, archived)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 default_user_id, now, default_user_id, now,
                 agent_data["name"],
@@ -93,7 +91,6 @@ def populate_ai_agents():
                 agent_data["main_prompt"],
                 preferred_voice_json,
                 enabled_tools_json,
-                voice_json,
                 False
             ))
             logger.info(f"  + Created agent '{agent_name}'.")

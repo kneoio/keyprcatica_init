@@ -4,44 +4,52 @@ from faker import Faker
 from slugify import slugify
 import random
 
-from cnst.const import generate_loc_name
+# --- MODIFIED SECTION START ---
+
+# Import VALID_COUNTRY_CODES from your constants file
+from cnst.const import generate_loc_name, VALID_COUNTRY_CODES
 from database import get_connection
+# NOTE: This import is no longer used for country selection and can likely be removed.
 from cnst.country_codes import country_codes
 from util.logging import logger
 from util.permissions import add_default_superuser_permissions
 
-
 fake = Faker()
 
+
 def generate_listeners(count=10):
+    """Generates listener entries in the database with a valid country code."""
     conn = get_connection()
     cursor = conn.cursor()
 
-    for i in range(count):
+    # Fetch all brand IDs first to avoid querying in a loop if no listeners can be created
+    cursor.execute("SELECT id FROM kneobroadcaster__brands WHERE archived = 0 ORDER BY RANDOM()")
+    brand_rows = cursor.fetchall()
+    if not brand_rows:
+        logger.error("No active brands found in the database. Cannot create listeners.")
+        return
+    brand_ids = [row[0] for row in brand_rows]
+
+    # Fetch all user IDs that are not yet listeners
+    cursor.execute("""
+        SELECT u.id FROM _users u
+        LEFT JOIN kneobroadcaster__listeners l ON u.id = l.user_id
+        WHERE l.id IS NULL AND u.id > 1
+    """)
+    user_rows = cursor.fetchall()
+    if not user_rows:
+        logger.error("No available users to create new listeners for.")
+        return
+    available_user_ids = [row[0] for row in user_rows]
+    random.shuffle(available_user_ids)
+
+    logger.info(f"Attempting to create {count} new listeners...")
+    created_count = 0
+    for i in range(min(count, len(available_user_ids))):
         try:
             now = datetime.now()
-
-            # Fetch a random user and brand
-            cursor.execute(
-                "SELECT reader, brand.id "
-                "FROM kneobroadcaster__brands brand, kneobroadcaster__brand_readers rls "
-                "WHERE brand.id = rls.entity_id AND reader > 1 ORDER BY RANDOM() LIMIT 1"
-            )
-            row = cursor.fetchone()
-            if row is None:
-                logger.error("No valid user and brand found for listener creation.")
-                continue
-
-            user_id, brand_id = row
-
-            # Check if the user already has a listener
-            cursor.execute(
-                "SELECT id FROM kneobroadcaster__listeners WHERE user_id = %s LIMIT 1",
-                (user_id,)
-            )
-            if cursor.fetchone() is not None:
-                logger.warning(f"User {user_id} already has a listener. Skipping.")
-                continue
+            user_id = available_user_ids[i]
+            brand_id = random.choice(brand_ids)  # Assign a random brand
 
             # Generate listener data
             listener_name = fake.name()
@@ -49,7 +57,9 @@ def generate_listeners(count=10):
             nick = fake.user_name()
             loc_name = generate_loc_name(listener_name, listener_name, listener_name)
             nick_name = generate_loc_name(nick, nick, nick)
-            country = random.choice(country_codes)["name"]
+
+            # FIX: Use the VALID_COUNTRY_CODES list to get a valid two-letter country code
+            country = random.choice(VALID_COUNTRY_CODES)
 
             # Insert listener
             cursor.execute("""
@@ -57,16 +67,11 @@ def generate_listeners(count=10):
                 (user_id, author, reg_date, last_mod_user, last_mod_date, country, loc_name, nickname, slug_name, archived)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
             """, (
-                user_id,
-                0,  # Assuming author is a system user or default value
-                now,
-                0,  # Assuming last_mod_user is a system user or default value
-                now,
+                user_id, 0, now, 0, now,
                 country,
                 json.dumps(loc_name),
                 json.dumps(nick_name),
-                slug_name,
-                0  # archived flag
+                slug_name, 0
             ))
             listener_id = cursor.fetchone()[0]
 
@@ -76,33 +81,27 @@ def generate_listeners(count=10):
                 (listener_id, reg_date, brand_id, rank)
                 VALUES (%s, %s, %s, %s)
             """, (
-                listener_id,
-                now,
-                brand_id,
-                fake.random_int(min=1, max=10)  # Random rank between 1 and 10
+                listener_id, now, brand_id, fake.random_int(min=1, max=100)
             ))
 
-            # Insert listener readers and permissions
+            # Add edit/delete permissions for the user themselves
             cursor.execute("""
                 INSERT INTO kneobroadcaster__listener_readers 
                 (reader, entity_id, can_edit, can_delete, reading_time)
                 VALUES (%s, %s, %s, %s, %s)
-            """, (
-                user_id,
-                listener_id,
-                True,  # can_edit
-                True,  # can_delete
-                now
-            ))
+            """, (user_id, listener_id, True, True, now))
 
-            # Add superuser permissions
             add_default_superuser_permissions(cursor, listener_id, "kneobroadcaster__listener_readers")
 
-            logger.info(f"Listener {i + 1}/{count} inserted with name: {listener_name}")
-        except Exception as e:
-            logger.error(f"Error inserting listener {i + 1}: {e}")
+            created_count += 1
+            logger.info(f"Listener {created_count}/{count} inserted for user_id: {user_id}")
 
-    conn.commit()
+        except Exception as e:
+            logger.error(f"Error inserting listener for user {user_id}: {e}")
+            conn.rollback()  # Rollback the single failed transaction
+            continue  # Continue to the next listener
+
+    conn.commit()  # Commit all successful insertions
     cursor.close()
     conn.close()
-    logger.info("Finished inserting listeners.")
+    logger.info(f"Finished inserting listeners. Successfully created: {created_count}.")

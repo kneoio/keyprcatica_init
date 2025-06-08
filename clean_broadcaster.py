@@ -17,6 +17,7 @@ def delete_data():
             "kneobroadcaster__sound_fragment_readers",
             "kneobroadcaster__sound_fragments",
             "kneobroadcaster__profile_readers",
+            "kneobroadcaster__ai_agents",
             "kneobroadcaster__profiles",
             "kneobroadcaster__genres"
         ]

@@ -7,531 +7,531 @@ genre_options_data = [
     {
         "label": "Alternative Rock", "value": "Alternative Rock",
         "translations": {
-            "eng": "Alternative Rock",
-            "por": "Rock Alternativo",
-            "kaz": "Альтернативті рок",
+            "en": "Alternative Rock",
+            "pt": "Rock Alternativo",
+            "kk": "Альтернативті рок",
             "rus": "Альтернативный рок"
         }
     },
     {
         "label": "Ambient", "value": "Ambient",
         "translations": {
-            "eng": "Ambient",
-            "por": "Música Ambiente",
-            "kaz": "Эмбиент",
+            "en": "Ambient",
+            "pt": "Música Ambiente",
+            "kk": "Эмбиент",
             "rus": "Эмбиент"
         }
     },
     {
         "label": "Blues", "value": "Blues",
         "translations": {
-            "eng": "Blues",
-            "por": "Blues",
-            "kaz": "Блюз",
+            "en": "Blues",
+            "pt": "Blues",
+            "kk": "Блюз",
             "rus": "Блюз"
         }
     },
     {
         "label": "Chillout", "value": "Chillout",
         "translations": {
-            "eng": "Chillout",
-            "por": "Chillout",
-            "kaz": "Чиллаут",
+            "en": "Chillout",
+            "pt": "Chillout",
+            "kk": "Чиллаут",
             "rus": "Чиллаут"
         }
     },
     {
         "label": "Classical", "value": "Classical",
         "translations": {
-            "eng": "Classical",
-            "por": "Música Clássica",
-            "kaz": "Классикалық музыка",
+            "en": "Classical",
+            "pt": "Música Clássica",
+            "kk": "Классикалық музыка",
             "rus": "Классическая музыка"
         }
     },
     {
         "label": "Country", "value": "Country",
         "translations": {
-            "eng": "Country",
-            "por": "Country",
-            "kaz": "Кантри",
+            "en": "Country",
+            "pt": "Country",
+            "kk": "Кантри",
             "rus": "Кантри"
         }
     },
     {
         "label": "Crowd Rock", "value": "Crowd Rock",
         "translations": {
-            "eng": "Crowd Rock",
-            "por": "Rock de Estádio",
-            "kaz": "Стадиондық рок",
+            "en": "Crowd Rock",
+            "pt": "Rock de Estádio",
+            "kk": "Стадиондық рок",
             "rus": "Стадионный рок"
         }
     },
     {
         "label": "Dance", "value": "Dance",
         "translations": {
-            "eng": "Dance",
-            "por": "Dance Music",
-            "kaz": "Би музыкасы",
+            "en": "Dance",
+            "pt": "Dance Music",
+            "kk": "Би музыкасы",
             "rus": "Танцевальная музыка"
         }
     },
     {
         "label": "Dark Synth", "value": "Dark Synth",
         "translations": {
-            "eng": "Dark Synth",
-            "por": "Dark Synth",
-            "kaz": "Dark Synth",
+            "en": "Dark Synth",
+            "pt": "Dark Synth",
+            "kk": "Dark Synth",
             "rus": "Дарк-синт"
         }
     },
     {
         "label": "Downtempo", "value": "Downtempo",
         "translations": {
-            "eng": "Downtempo",
-            "por": "Downtempo",
-            "kaz": "Даунтемпо",
+            "en": "Downtempo",
+            "pt": "Downtempo",
+            "kk": "Даунтемпо",
             "rus": "Даунтемпо"
         }
     },
     {
         "label": "Drum and Bass", "value": "Drum and Bass",
         "translations": {
-            "eng": "Drum and Bass",
-            "por": "Drum and Bass",
-            "kaz": "Драм-н-бэйс",
+            "en": "Drum and Bass",
+            "pt": "Drum and Bass",
+            "kk": "Драм-н-бэйс",
             "rus": "Драм-н-бэйс"
         }
     },
     {
         "label": "Dubstep", "value": "Dubstep",
         "translations": {
-            "eng": "Dubstep",
-            "por": "Dubstep",
-            "kaz": "Дабстеп",
+            "en": "Dubstep",
+            "pt": "Dubstep",
+            "kk": "Дабстеп",
             "rus": "Дабстеп"
         }
     },
     {
         "label": "EBM", "value": "EBM",
         "translations": {
-            "eng": "EBM",
-            "por": "EBM",
-            "kaz": "EBM",
+            "en": "EBM",
+            "pt": "EBM",
+            "kk": "EBM",
             "rus": "EBM"
         }
     },
     {
         "label": "Electronic", "value": "Electronic",
         "translations": {
-            "eng": "Electronic",
-            "por": "Música Eletrónica",
-            "kaz": "Электрондық музыка",
+            "en": "Electronic",
+            "pt": "Música Eletrónica",
+            "kk": "Электрондық музыка",
             "rus": "Электронная музыка"
         }
     },
     {
         "label": "Electropop", "value": "Electropop",
         "translations": {
-            "eng": "Electropop",
-            "por": "Electropop",
-            "kaz": "Электропоп",
+            "en": "Electropop",
+            "pt": "Electropop",
+            "kk": "Электропоп",
             "rus": "Электропоп"
         }
     },
     {
         "label": "Experimental", "value": "Experimental",
         "translations": {
-            "eng": "Experimental",
-            "por": "Música Experimental",
-            "kaz": "Эксперименттік музыка",
+            "en": "Experimental",
+            "pt": "Música Experimental",
+            "kk": "Эксперименттік музыка",
             "rus": "Экспериментальная музыка"
         }
     },
     {
         "label": "Folk", "value": "Folk",
         "translations": {
-            "eng": "Folk",
-            "por": "Música Folclórica",
-            "kaz": "Фолк",
+            "en": "Folk",
+            "pt": "Música Folclórica",
+            "kk": "Фолк",
             "rus": "Фолк"
         }
     },
     {
         "label": "Funk", "value": "Funk",
         "translations": {
-            "eng": "Funk",
-            "por": "Funk",
-            "kaz": "Фанк",
+            "en": "Funk",
+            "pt": "Funk",
+            "kk": "Фанк",
             "rus": "Фанк"
         }
     },
     {
         "label": "Futurepop", "value": "Futurepop",
         "translations": {
-            "eng": "Futurepop",
-            "por": "Futurepop",
-            "kaz": "Futurepop",
+            "en": "Futurepop",
+            "pt": "Futurepop",
+            "kk": "Futurepop",
             "rus": "Futurepop"
         }
     },
     {
         "label": "Garage Rock", "value": "Garage Rock",
         "translations": {
-            "eng": "Garage Rock",
-            "por": "Garage Rock",
-            "kaz": "Гараж рок",
+            "en": "Garage Rock",
+            "pt": "Garage Rock",
+            "kk": "Гараж рок",
             "rus": "Гаражный рок"
         }
     },
     {
         "label": "Gospel", "value": "Gospel",
         "translations": {
-            "eng": "Gospel",
-            "por": "Gospel",
-            "kaz": "Госпел",
+            "en": "Gospel",
+            "pt": "Gospel",
+            "kk": "Госпел",
             "rus": "Госпел"
         }
     },
     {
         "label": "Goth Rock", "value": "Goth Rock",
         "translations": {
-            "eng": "Goth Rock",
-            "por": "Rock Gótico",
-            "kaz": "Готикалық рок",
+            "en": "Goth Rock",
+            "pt": "Rock Gótico",
+            "kk": "Готикалық рок",
             "rus": "Готик-рок"
         }
     },
     {
         "label": "Grunge", "value": "Grunge",
         "translations": {
-            "eng": "Grunge",
-            "por": "Grunge",
-            "kaz": "Гранж",
+            "en": "Grunge",
+            "pt": "Grunge",
+            "kk": "Гранж",
             "rus": "Гранж"
         }
     },
     {
         "label": "Hard Rock", "value": "Hard Rock",
         "translations": {
-            "eng": "Hard Rock",
-            "por": "Hard Rock",
-            "kaz": "Хард-рок",
+            "en": "Hard Rock",
+            "pt": "Hard Rock",
+            "kk": "Хард-рок",
             "rus": "Хард-рок"
         }
     },
     {
         "label": "Hip Hop", "value": "Hip Hop",
         "translations": {
-            "eng": "Hip Hop",
-            "por": "Hip Hop",
-            "kaz": "Хип-хоп",
+            "en": "Hip Hop",
+            "pt": "Hip Hop",
+            "kk": "Хип-хоп",
             "rus": "Хип-хоп"
         }
     },
     {
         "label": "House", "value": "House",
         "translations": {
-            "eng": "House",
-            "por": "House Music",
-            "kaz": "Хаус",
+            "en": "House",
+            "pt": "House Music",
+            "kk": "Хаус",
             "rus": "Хаус"
         }
     },
     {
         "label": "IDM", "value": "IDM",
         "translations": {
-            "eng": "IDM",
-            "por": "IDM",
-            "kaz": "IDM",
+            "en": "IDM",
+            "pt": "IDM",
+            "kk": "IDM",
             "rus": "IDM"
         }
     },
     {
         "label": "Indie Pop", "value": "Indie Pop",
         "translations": {
-            "eng": "Indie Pop",
-            "por": "Indie Pop",
-            "kaz": "Инди-поп",
+            "en": "Indie Pop",
+            "pt": "Indie Pop",
+            "kk": "Инди-поп",
             "rus": "Инди-поп"
         }
     },
     {
         "label": "Indie Rock", "value": "Indie Rock",
         "translations": {
-            "eng": "Indie Rock",
-            "por": "Indie Rock",
-            "kaz": "Инди-рок",
+            "en": "Indie Rock",
+            "pt": "Indie Rock",
+            "kk": "Инди-рок",
             "rus": "Инди-рок"
         }
     },
     {
         "label": "Industrial", "value": "Industrial",
         "translations": {
-            "eng": "Industrial",
-            "por": "Industrial",
-            "kaz": "Индастриал",
+            "en": "Industrial",
+            "pt": "Industrial",
+            "kk": "Индастриал",
             "rus": "Индастриал"
         }
     },
     {
         "label": "Industrial Metal", "value": "Industrial Metal",
         "translations": {
-            "eng": "Industrial Metal",
-            "por": "Metal Industrial",
-            "kaz": "Индастриал-метал",
+            "en": "Industrial Metal",
+            "pt": "Metal Industrial",
+            "kk": "Индастриал-метал",
             "rus": "Индастриал-метал"
         }
     },
     {
         "label": "Instrumental", "value": "Instrumental",
         "translations": {
-            "eng": "Instrumental",
-            "por": "Instrumental",
-            "kaz": "Инструменталды",
+            "en": "Instrumental",
+            "pt": "Instrumental",
+            "kk": "Инструменталды",
             "rus": "Инструментальная"
         }
     },
     {
         "label": "Jazz", "value": "Jazz",
         "translations": {
-            "eng": "Jazz",
-            "por": "Jazz",
-            "kaz": "Джаз",
+            "en": "Jazz",
+            "pt": "Jazz",
+            "kk": "Джаз",
             "rus": "Джаз"
         }
     },
     {
         "label": "Latin", "value": "Latin",
         "translations": {
-            "eng": "Latin",
-            "por": "Música Latina",
-            "kaz": "Латын музыкасы",
+            "en": "Latin",
+            "pt": "Música Latina",
+            "kk": "Латын музыкасы",
             "rus": "Латинская музыка"
         }
     },
     {
         "label": "Lo-fi", "value": "Lo-fi",
         "translations": {
-            "eng": "Lo-fi",
-            "por": "Lo-fi",
-            "kaz": "Lo-fi",
+            "en": "Lo-fi",
+            "pt": "Lo-fi",
+            "kk": "Lo-fi",
             "rus": "Lo-fi"
         }
     },
     {
         "label": "Metal", "value": "Metal",
         "translations": {
-            "eng": "Metal",
-            "por": "Metal",
-            "kaz": "Метал",
+            "en": "Metal",
+            "pt": "Metal",
+            "kk": "Метал",
             "rus": "Метал"
         }
     },
     {
         "label": "Minimal Synth", "value": "Minimal Synth",
         "translations": {
-            "eng": "Minimal Synth",
-            "por": "Minimal Synth",
-            "kaz": "Minimal Synth",
+            "en": "Minimal Synth",
+            "pt": "Minimal Synth",
+            "kk": "Minimal Synth",
             "rus": "Минимал-синт"
         }
     },
     {
         "label": "New Wave", "value": "New Wave",
         "translations": {
-            "eng": "New Wave",
-            "por": "New Wave",
-            "kaz": "Нью-вейв",
+            "en": "New Wave",
+            "pt": "New Wave",
+            "kk": "Нью-вейв",
             "rus": "Нью-вейв"
         }
     },
     {
         "label": "Noise", "value": "Noise",
         "translations": {
-            "eng": "Noise",
-            "por": "Noise",
-            "kaz": "Нойз",
+            "en": "Noise",
+            "pt": "Noise",
+            "kk": "Нойз",
             "rus": "Нойз"
         }
     },
     {
         "label": "Other", "value": "Other",
         "translations": {
-            "eng": "Other",
-            "por": "Outro",
-            "kaz": "Басқа",
+            "en": "Other",
+            "pt": "Outro",
+            "kk": "Басқа",
             "rus": "Другое"
         }
     },
     {
         "label": "Pop", "value": "Pop",
         "translations": {
-            "eng": "Pop",
-            "por": "Pop",
-            "kaz": "Поп",
+            "en": "Pop",
+            "pt": "Pop",
+            "kk": "Поп",
             "rus": "Поп"
         }
     },
     {
         "label": "Post-Punk", "value": "Post-Punk",
         "translations": {
-            "eng": "Post-Punk",
-            "por": "Pós-Punk",
-            "kaz": "Пост-панк",
+            "en": "Post-Punk",
+            "pt": "Pós-Punk",
+            "kk": "Пост-панк",
             "rus": "Пост-панк"
         }
     },
     {
         "label": "Progressive Rock", "value": "Progressive Rock",
         "translations": {
-            "eng": "Progressive Rock",
-            "por": "Rock Progressivo",
-            "kaz": "Прогрессивті рок",
+            "en": "Progressive Rock",
+            "pt": "Rock Progressivo",
+            "kk": "Прогрессивті рок",
             "rus": "Прогрессивный рок"
         }
     },
     {
         "label": "Psychedelic Rock", "value": "Psychedelic Rock",
         "translations": {
-            "eng": "Psychedelic Rock",
-            "por": "Rock Psicadélico",
-            "kaz": "Психоделикалық рок",
+            "en": "Psychedelic Rock",
+            "pt": "Rock Psicadélico",
+            "kk": "Психоделикалық рок",
             "rus": "Психоделический рок"
         }
     },
     {
         "label": "Punk Rock", "value": "Punk Rock",
         "translations": {
-            "eng": "Punk Rock",
-            "por": "Punk Rock",
-            "kaz": "Панк-рок",
+            "en": "Punk Rock",
+            "pt": "Punk Rock",
+            "kk": "Панк-рок",
             "rus": "Панк-рок"
         }
     },
     {
         "label": "R&B", "value": "R&B",
         "translations": {
-            "eng": "R&B",
-            "por": "R&B",
-            "kaz": "R&B",
+            "en": "R&B",
+            "pt": "R&B",
+            "kk": "R&B",
             "rus": "R&B"
         }
     },
     {
         "label": "Reggae", "value": "Reggae",
         "translations": {
-            "eng": "Reggae",
-            "por": "Reggae",
-            "kaz": "Регги",
+            "en": "Reggae",
+            "pt": "Reggae",
+            "kk": "Регги",
             "rus": "Регги"
         }
     },
     {
         "label": "Rock", "value": "Rock",
         "translations": {
-            "eng": "Rock",
-            "por": "Rock",
-            "kaz": "Рок",
+            "en": "Rock",
+            "pt": "Rock",
+            "kk": "Рок",
             "rus": "Рок"
         }
     },
     {
         "label": "Shoegaze", "value": "Shoegaze",
         "translations": {
-            "eng": "Shoegaze",
-            "por": "Shoegaze",
-            "kaz": "Шугейз",
+            "en": "Shoegaze",
+            "pt": "Shoegaze",
+            "kk": "Шугейз",
             "rus": "Шугейз"
         }
     },
     {
         "label": "Ska", "value": "Ska",
         "translations": {
-            "eng": "Ska",
-            "por": "Ska",
-            "kaz": "Ска",
+            "en": "Ska",
+            "pt": "Ska",
+            "kk": "Ска",
             "rus": "Ска"
         }
     },
     {
         "label": "Soul", "value": "Soul",
         "translations": {
-            "eng": "Soul",
-            "por": "Soul",
-            "kaz": "Соул",
+            "en": "Soul",
+            "pt": "Soul",
+            "kk": "Соул",
             "rus": "Соул"
         }
     },
     {
         "label": "Soundtrack", "value": "Soundtrack",
         "translations": {
-            "eng": "Soundtrack",
-            "por": "Trilha Sonora",
-            "kaz": "Саундтрек",
+            "en": "Soundtrack",
+            "pt": "Trilha Sonora",
+            "kk": "Саундтрек",
             "rus": "Саундтрек"
         }
     },
     {
         "label": "Spoken Word", "value": "Spoken Word",
         "translations": {
-            "eng": "Spoken Word",
-            "por": "Palavra Falada",
-            "kaz": "Spoken Word",
+            "en": "Spoken Word",
+            "pt": "Palavra Falada",
+            "kk": "Spoken Word",
             "rus": "Разговорный жанр"
         }
     },
     {
         "label": "Synthwave", "value": "Synthwave",
         "translations": {
-            "eng": "Synthwave",
-            "por": "Synthwave",
-            "kaz": "Synthwave",
+            "en": "Synthwave",
+            "pt": "Synthwave",
+            "kk": "Synthwave",
             "rus": "Синтвейв"
         }
     },
     {
         "label": "Techno", "value": "Techno",
         "translations": {
-            "eng": "Techno",
-            "por": "Techno",
-            "kaz": "Техно",
+            "en": "Techno",
+            "pt": "Techno",
+            "kk": "Техно",
             "rus": "Техно"
         }
     },
     {
         "label": "Trance", "value": "Trance",
         "translations": {
-            "eng": "Trance",
-            "por": "Trance",
-            "kaz": "Транс",
+            "en": "Trance",
+            "pt": "Trance",
+            "kk": "Транс",
             "rus": "Транс"
         }
     },
     {
         "label": "Trip Hop", "value": "Trip Hop",
         "translations": {
-            "eng": "Trip Hop",
-            "por": "Trip Hop",
-            "kaz": "Трип-хоп",
+            "en": "Trip Hop",
+            "pt": "Trip Hop",
+            "kk": "Трип-хоп",
             "rus": "Трип-хоп"
         }
     },
     {
         "label": "Vaporwave", "value": "Vaporwave",
         "translations": {
-            "eng": "Vaporwave",
-            "por": "Vaporwave",
-            "kaz": "Vaporwave",
+            "en": "Vaporwave",
+            "pt": "Vaporwave",
+            "kk": "Vaporwave",
             "rus": "Vaporwave"
         }
     },
     {
         "label": "World Music", "value": "World Music",
         "translations": {
-            "eng": "World Music",
-            "por": "World Music",
-            "kaz": "Әлем музыкасы",
+            "en": "World Music",
+            "pt": "World Music",
+            "kk": "Әлем музыкасы",
             "rus": "Этническая музыка"
         }
     }

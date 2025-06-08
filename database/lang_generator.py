@@ -6,20 +6,20 @@ from cnst.const import LANGUAGES  # Import the centralized language constants
 
 # Translations for each language in three languages: eng, por, kaz
 translations = {
-    "eng": {
-        "eng": "English",
-        "por": "Inglês",
-        "kaz": "Ағылшын"
+    "en": {
+        "en": "English",
+        "pt": "Inglês",
+        "kk": "Ағылшын"
     },
-    "por": {
-        "eng": "Portuguese",
-        "por": "Português",
-        "kaz": "Португал"
+    "pt": {
+        "en": "Portuguese",
+        "pt": "Português",
+        "kk": "Португал"
     },
-    "kaz": {
-        "eng": "Kazakh",
-        "por": "Cazaque",
-        "kaz": "Қазақ"
+    "kk": {
+        "en": "Kazakh",
+        "pt": "Cazaque",
+        "kk": "Қазақ"
     }
 }
 
