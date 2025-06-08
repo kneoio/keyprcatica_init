@@ -5,6 +5,7 @@ __pycache__/
 # Virtual environment
 .env/
 venv/
+.venv/
 
 # IDE configurations
 .idea/
@@ -21,3 +22,6 @@ venv/
 
 # macOS specific
 .DS_Store
+
+# SSH tunnel script
+run_tunnel.ps1
