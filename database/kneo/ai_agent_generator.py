@@ -6,8 +6,6 @@ from datetime import datetime
 from database import get_connection
 from util.logging import logger
 
-
-
 AI_AGENT_DATA_EXAMPLES = [
     {
         "name": "Glo",
@@ -91,7 +89,7 @@ def populate_ai_agents():
                 agent_data["main_prompt"],
                 preferred_voice_json,
                 enabled_tools_json,
-                False
+                0
             ))
             logger.info(f"  + Created agent '{agent_name}'.")
 

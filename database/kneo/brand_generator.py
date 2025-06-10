@@ -96,11 +96,11 @@ def generate_brands():
 
                 cursor.execute("""
                     INSERT INTO kneobroadcaster__brands
-                    (author, reg_date, last_mod_user, last_mod_date, country, primary_lang,
+                    (author, reg_date, last_mod_user, last_mod_date, country, 
                      loc_name, slug_name, archived, color, schedule, ai_agent_id, managing_mode, time_zone)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
                 """, (
-                    0, now, 0, now, country, 'en',
+                    0, now, 0, now, country,
                     json.dumps(loc_name),
                     slug_name,
                     0, # <<< THE FIX IS HERE: Changed `False` to `0`.

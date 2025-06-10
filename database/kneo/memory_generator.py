@@ -51,11 +51,6 @@ AUDIENCE_CONTEXTS_DATA = [
 
 
 def populate_brand_memories():
-    """
-    Populates the kneobroadcaster__memory table with test data.
-    It finds brand names dynamically from the database and randomly assigns
-    one of the abstract, hardcoded JSON examples to each brand.
-    """
     conn = None
     cursor = None
     try:
