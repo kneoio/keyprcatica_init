@@ -81,7 +81,7 @@ def populate_brand_memories():
 
             # --- Generate and Insert LISTENERS Memory ---
             cursor.execute("""
-                SELECT 1 FROM kneobroadcaster__memory
+                SELECT 1 FROM kneobroadcaster__memories
                 WHERE brand = %s AND memory_type = 'LISTENERS'
             """, (brand_slug,))
 
@@ -94,18 +94,18 @@ def populate_brand_memories():
                 content_json = json.dumps(listeners_data)
 
                 cursor.execute("""
-                    INSERT INTO kneobroadcaster__memory
+                    INSERT INTO kneobroadcaster__memories
                     (author, reg_date, last_mod_user, last_mod_date, brand, memory_type, content, archived)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                 """, (
                     default_user_id, now, default_user_id, now,
-                    brand_slug, 'LISTENERS', content_json, False
+                    brand_slug, 'LISTENERS', content_json, 0
                 ))
                 logger.info(f"  + Created 'LISTENERS' memory for '{brand_slug}'.")
 
             # --- Generate and Insert AUDIENCE_CONTEXT Memory ---
             cursor.execute("""
-                SELECT 1 FROM kneobroadcaster__memory
+                SELECT 1 FROM kneobroadcaster__memories
                 WHERE brand = %s AND memory_type = 'AUDIENCE_CONTEXT'
             """, (brand_slug,))
 
@@ -118,12 +118,12 @@ def populate_brand_memories():
                 content_json = json.dumps(context_data)
 
                 cursor.execute("""
-                    INSERT INTO kneobroadcaster__memory
+                    INSERT INTO kneobroadcaster__memories
                     (author, reg_date, last_mod_user, last_mod_date, brand, memory_type, content, archived)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                 """, (
                     default_user_id, now, default_user_id, now,
-                    brand_slug, 'AUDIENCE_CONTEXT', content_json, False
+                    brand_slug, 'AUDIENCE_CONTEXT', content_json, 0
                 ))
                 logger.info(f"  + Created 'AUDIENCE_CONTEXT' memory for '{brand_slug}'.")
 
