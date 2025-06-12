@@ -10,27 +10,60 @@ from cnst.country_codes import country_codes
 from util.logging import logger
 from util.permissions import add_default_superuser_permissions
 
-STATIC_BRAND_NAMES = [
-    "skyscope",
-    "aizoo",
-    "nitroglycerin",
-    "bratan",
-    "bit2bit",
-    "mood387"
+STATIC_BRAND_CONFIGS = [
+    {
+        "name": "skyscope",
+        "color": "#1E88E5",
+        "country": "PT",
+        "time_zone": "Europe/Lisbon",
+        "managing_mode": "AI_AGENT",
+        "description": "Ambient electronic and downtempo music for focus and relaxation. Features atmospheric soundscapes, chillout beats, and modern instrumental compositions perfect for work or study sessions."
+    },
+    {
+        "name": "aizoo",
+        "color": "#FF6B35",
+        "country": "JP",
+        "time_zone": "Asia/Tokyo",
+        "managing_mode": "AI_AGENT",
+        "description": "Cutting-edge J-pop, electronic dance music, and experimental beats. Showcasing the latest trends in Japanese music culture with high-energy tracks and innovative sound design."
+    },
+    {
+        "name": "nitroglycerin",
+        "color": "#DC143C",
+        "country": "DE",
+        "time_zone": "Europe/Berlin",
+        "managing_mode": "AI_AGENT",
+        "description": "High-octane rock, metal, and punk music that hits hard. From classic heavy metal anthems to modern hardcore punk, delivering explosive energy 24/7."
+    },
+    {
+        "name": "bratan",
+        "color": "#4CAF50",
+        "country": "KZ",
+        "time_zone": "Asia/Almaty",
+        "managing_mode": "AI_AGENT",
+        "description": "Traditional Slavic folk music mixed with modern electronic elements. Features balalaika-infused beats, Russian chanson, and contemporary interpretations of Eastern European melodies."
+    },
+    {
+        "name": "bit2bit",
+        "color": "#9C27B0",
+        "country": "GB",
+        "time_zone": "Europe/London",
+        "managing_mode": "AI_AGENT",
+        "description": "Nostalgic chiptune and 8-bit music celebrating retro gaming culture. From classic arcade soundtracks to modern chip music artists, perfect for gamers and digital nostalgia enthusiasts."
+    },
+    {
+        "name": "mood387",
+        "color": "#FF9800",
+        "country": "PT",
+        "time_zone": "Europe/Lisbon",
+        "managing_mode": "AI_AGENT",
+        "description": "Smooth bossa nova, Brazilian jazz, and Latin rhythms that set the perfect mood. Features both classic MPB legends and contemporary Brazilian artists with soulful melodies and tropical vibes."
+    }
 ]
 
-# The helper functions (generate_brand_color, generate_unique_ai_name) remain the same.
-def generate_brand_color(brand_name):
-    # ... (no changes here)
-    name_hash = hash(brand_name)
-    h = (name_hash % 360) / 360.0
-    s = 0.7 + ((name_hash % 30) / 100.0)
-    v = 0.5 + ((name_hash % 40) / 100.0)
-    r, g, b = colorsys.hsv_to_rgb(h, s, v)
-    return "#{:02x}{:02x}{:02x}".format(int(r * 255), int(g * 255), int(b * 255))
 
 def generate_unique_ai_name():
-    # ... (no changes here)
+    """Generate a unique AI agent name"""
     syllables1 = ["Zor", "Xyl", "Glo", "Vee", "Nix", "Kael", "Crym", "Plaz"]
     syllables2 = ["tek", "nex", "lar", "qon", "vex", "tron", "mar", "flux"]
     return random.choice(syllables1) + random.choice(syllables2) + str(random.randint(100, 999))
@@ -38,8 +71,8 @@ def generate_unique_ai_name():
 
 def generate_brands():
     """
-    Generates brand entries in the database, assigning a pre-existing or newly created
-    AI agent to each, in compliance with the updated database schema.
+    Generates brand entries in the database using static configurations,
+    assigning a pre-existing or newly created AI agent to each.
     """
     conn = get_connection()
     cursor = conn.cursor()
@@ -73,13 +106,20 @@ def generate_brands():
                 conn.rollback()
                 return
 
-        for i, brand_name in enumerate(STATIC_BRAND_NAMES):
+        for i, brand_config in enumerate(STATIC_BRAND_CONFIGS):
             try:
                 now = datetime.now()
+                brand_name = brand_config["name"]
                 slug_name = slugify(brand_name)
                 loc_name = generate_loc_name(brand_name, brand_name, brand_name)
-                country = random.choice(VALID_COUNTRY_CODES) if VALID_COUNTRY_CODES else 'PT'
-                color = generate_brand_color(brand_name)
+
+                # Use hardcoded values from configuration
+                country = brand_config["country"]
+                color = brand_config["color"]
+                time_zone = brand_config["time_zone"]
+                managing_mode = brand_config["managing_mode"]
+                description = brand_config["description"]
+
                 ai_agent_id = None
                 ai_agent_name_log = None
 
@@ -97,15 +137,15 @@ def generate_brands():
                 cursor.execute("""
                     INSERT INTO kneobroadcaster__brands
                     (author, reg_date, last_mod_user, last_mod_date, country, 
-                     loc_name, slug_name, archived, color, schedule, ai_agent_id, managing_mode, time_zone)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
+                     loc_name, slug_name, archived, color, schedule, ai_agent_id, managing_mode, time_zone, description)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
                 """, (
                     0, now, 0, now, country,
                     json.dumps(loc_name),
                     slug_name,
-                    0, # <<< THE FIX IS HERE: Changed `False` to `0`.
+                    0,  # archived = False
                     color,
-                    json.dumps({}), ai_agent_id, 'AI_AGENT', 'Europe/Lisbon'
+                    json.dumps({}), ai_agent_id, managing_mode, time_zone, description
                 ))
                 brand_id = cursor.fetchone()[0]
 
@@ -121,11 +161,14 @@ def generate_brands():
 
                 add_default_superuser_permissions(cursor, brand_id, "kneobroadcaster__brand_readers")
 
-                logger.info(f"Brand {i + 1}/{len(STATIC_BRAND_NAMES)} inserted: {brand_name}, Linked AI Agent: {ai_agent_name_log}")
+                logger.info(
+                    f"Brand {i + 1}/{len(STATIC_BRAND_CONFIGS)} inserted: {brand_name} ({country}, {time_zone})")
+                logger.info(f"  Color: {color}, AI Agent: {ai_agent_name_log}")
+                logger.info(f"  Description: {description[:50]}...")
                 conn.commit()
 
             except Exception as e:
-                logger.error(f"Error inserting brand {i + 1} ({brand_name}): {e}")
+                logger.error(f"Error inserting brand {i + 1} ({brand_config['name']}): {e}")
                 conn.rollback()
                 continue
 
@@ -135,10 +178,10 @@ def generate_brands():
     finally:
         cursor.close()
         conn.close()
-        logger.info(f"Finished inserting {len(STATIC_BRAND_NAMES)} static brands.")
+        logger.info(f"Finished inserting {len(STATIC_BRAND_CONFIGS)} static brands.")
 
 
 if __name__ == '__main__':
-    logger.info("Starting brand generation script...")
+    logger.info("Starting enhanced brand generation script...")
     generate_brands()
     logger.info("Brand generation script finished.")
