@@ -15,6 +15,7 @@ AI_AGENT_DATA_EXAMPLES = [
         "enabled_tools": [
             {"name": "Song Request Tool", "variable_name": "find_song", "description": "Finds and queues a song based on listener request."}
         ],
+        "talkativity": 0.2
     },
     {
         "name": "Veenuo",
@@ -23,14 +24,16 @@ AI_AGENT_DATA_EXAMPLES = [
         "preferred_voice": [{"id": "TX3LPaxmHKxFdv7VOQHJ","name": "Liam"},{"id": "cjVigY5qzO86Huf0OWal","name": "Eric"}],
         "enabled_tools": [
             {"name": "Current Headlines API", "variable_name": "get_headlines", "description": "Fetches the latest news headlines from a trusted source."}
-        ]
+        ],
+        "talkativity": 0.3
     },
     {
         "name": "Nixeno",
         "preferred_lang": "en",
         "main_prompt": "You are a radio DJ for {brand}. Introduce {song_title} by {artist}. Connect with our audience, like {listeners}. Consider the current context: {context}. Keep your introduction short (10-20 words). Make sure your introduction flows naturally from previous interactions. Previous interactions context: {history}",
         "preferred_voice": [{"id":"nPczCjzI2devNBz1zQrb","name":"Brain"},{"id":"CwhRBWXzGAHq8TQ4Fs17","name":"Roger"}],
-        "enabled_tools": []
+        "enabled_tools": [],
+        "talkativity": 0.35
     },
     {
         "name": "Ze",
@@ -39,7 +42,8 @@ AI_AGENT_DATA_EXAMPLES = [
         "preferred_voice": [{"id": "aLFUti4k8YKvtQGXv0UO","name": "Paulo"}],
         "enabled_tools": [
             {"name": "Global Weather API", "variable_name": "get_weather_forecast", "description": "Provides detailed weather forecasts for any location."}
-        ]
+        ],
+        "talkativity": 0.5
     },
     {
         "name": "Nestor",
@@ -48,7 +52,8 @@ AI_AGENT_DATA_EXAMPLES = [
         "preferred_voice": [{"id": "0BcDz9UPwL3MpsnTeUlO","name": "Denis"}],
         "enabled_tools": [
             {"name": "Global Weather API", "variable_name": "get_weather_forecast", "description": "Provides detailed weather forecasts for any location."}
-        ]
+        ],
+        "talkativity": 0.3
     },
 ]
 
@@ -80,8 +85,8 @@ def populate_ai_agents():
 
             cursor.execute("""
                 INSERT INTO kneobroadcaster__ai_agents
-                (author, reg_date, last_mod_user, last_mod_date, name, preferred_lang, main_prompt, preferred_voice, enabled_tools, archived)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                (author, reg_date, last_mod_user, last_mod_date, name, preferred_lang, main_prompt, preferred_voice, enabled_tools, talkativity, archived)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 default_user_id, now, default_user_id, now,
                 agent_data["name"],
@@ -89,9 +94,10 @@ def populate_ai_agents():
                 agent_data["main_prompt"],
                 preferred_voice_json,
                 enabled_tools_json,
+                agent_data["talkativity"],
                 0
             ))
-            logger.info(f"  + Created agent '{agent_name}'.")
+            logger.info(f"  + Created agent '{agent_name}' with talkativity {agent_data['talkativity']}.")
 
         conn.commit()
         logger.info(f"Successfully processed {len(AI_AGENT_DATA_EXAMPLES)} potential agents. Commit successful.")

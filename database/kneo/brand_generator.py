@@ -12,7 +12,7 @@ from util.permissions import add_default_superuser_permissions
 
 STATIC_BRAND_CONFIGS = [
     {
-        "name": "skyscope",
+        "name": "sexta",
         "color": "#1E88E5",
         "country": "PT",
         "time_zone": "Europe/Lisbon",
@@ -41,7 +41,7 @@ STATIC_BRAND_CONFIGS = [
         "country": "KZ",
         "time_zone": "Asia/Almaty",
         "managing_mode": "AI_AGENT",
-        "description": "Traditional Slavic folk music mixed with modern electronic elements. Features balalaika-infused beats, Russian chanson, and contemporary interpretations of Eastern European melodies."
+        "description": "Deep house, funk, disco, and electronic dance music with groovy basslines. Features underground house beats, classic funk rhythms, and modern disco-influenced tracks that keep the dance floor moving."
     },
     {
         "name": "bit2bit",
@@ -52,59 +52,67 @@ STATIC_BRAND_CONFIGS = [
         "description": "Nostalgic chiptune and 8-bit music celebrating retro gaming culture. From classic arcade soundtracks to modern chip music artists, perfect for gamers and digital nostalgia enthusiasts."
     },
     {
-        "name": "mood387",
+        "name": "labirints",
         "color": "#FF9800",
-        "country": "PT",
-        "time_zone": "Europe/Lisbon",
+        "country": "LV",
+        "time_zone": "Europe/Riga",
         "managing_mode": "AI_AGENT",
-        "description": "Smooth bossa nova, Brazilian jazz, and Latin rhythms that set the perfect mood. Features both classic MPB legends and contemporary Brazilian artists with soulful melodies and tropical vibes."
+        "description": "Dark industrial, experimental electronic, and intelligent dance music (IDM). Features harsh mechanical beats, complex rhythmic patterns, and avant-garde electronic compositions for discerning listeners."
     }
 ]
 
+# Country to preferred language mapping
+COUNTRY_LANGUAGE_MAP = {
+    "PT": ["pt", "en"],  # Portuguese, fallback to English
+    "JP": ["ja", "en"],  # Japanese, fallback to English
+    "DE": ["de", "en"],  # German, fallback to English
+    "KZ": ["kk", "ru", "en"],  # Kazakh, fallback to Russian, then English
+    "GB": ["en"],  # English
+    "LV": ["lv", "en"],  # Latvian, fallback to English
+    "RU": ["ru", "en"],  # Russian, fallback to English
+    "US": ["en"],  # English
+    "FR": ["fr", "en"],  # French, fallback to English
+    "ES": ["es", "en"],  # Spanish, fallback to English
+    "IT": ["it", "en"],  # Italian, fallback to English
+    "CN": ["zh", "en"],  # Chinese, fallback to English
+    "BR": ["pt", "en"],  # Portuguese (Brazil), fallback to English
+}
 
-def generate_unique_ai_name():
-    """Generate a unique AI agent name"""
-    syllables1 = ["Zor", "Xyl", "Glo", "Vee", "Nix", "Kael", "Crym", "Plaz"]
-    syllables2 = ["tek", "nex", "lar", "qon", "vex", "tron", "mar", "flux"]
-    return random.choice(syllables1) + random.choice(syllables2) + str(random.randint(100, 999))
+
+def find_best_ai_agent(ai_agents, country):
+    if not ai_agents:
+        return None
+
+    # Get preferred languages for the country
+    preferred_languages = COUNTRY_LANGUAGE_MAP.get(country, ["en"])
+
+    # Try to find agents that match the preferred languages in order
+    for preferred_lang in preferred_languages:
+        matching_agents = [agent for agent in ai_agents if agent[2] == preferred_lang]
+        if matching_agents:
+            logger.info(
+                f"Found {len(matching_agents)} agent(s) with preferred language '{preferred_lang}' for country '{country}'")
+            return random.choice(matching_agents)
+
+    # If no language match found, return a random agent
+    logger.info(f"No language-specific agent found for country '{country}', selecting random agent")
+    return random.choice(ai_agents)
 
 
 def generate_brands():
-    """
-    Generates brand entries in the database using static configurations,
-    assigning a pre-existing or newly created AI agent to each.
-    """
     conn = get_connection()
     cursor = conn.cursor()
     ai_agents = []
-    created_fallback_agent_id = None
-    created_fallback_agent_name = None
 
     try:
-        cursor.execute("SELECT id, name FROM kneobroadcaster__ai_agents WHERE archived = FALSE")
+        cursor.execute("SELECT id, name, preferred_lang FROM kneobroadcaster__ai_agents WHERE archived = 0")
         ai_agents = cursor.fetchall()
 
         if not ai_agents:
-            logger.warning("No AI agents found. A new fallback AI agent will be created and used.")
-            try:
-                now = datetime.now()
-                fallback_name = generate_unique_ai_name()
-                cursor.execute("""
-                    INSERT INTO kneobroadcaster__ai_agents
-                    (author, reg_date, last_mod_user, last_mod_date, archived, name, preferred_lang, preferred_voice)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
-                """, (
-                    0, now, 0, now, False, fallback_name, 'en',
-                    json.dumps(["nPczCjzI2devNBz1zQrb"])
-                ))
-                created_fallback_agent_id = cursor.fetchone()[0]
-                created_fallback_agent_name = f"{fallback_name} (generated)"
-                conn.commit()
-                logger.info(f"Successfully created fallback AI agent with ID: {created_fallback_agent_id}")
-            except Exception as e:
-                logger.error(f"Fatal: Failed to create a fallback AI agent: {e}. Aborting script.")
-                conn.rollback()
-                return
+            logger.error("No AI agents found in database. Please run the AI agent generator first.")
+            return
+
+        logger.info(f"Found {len(ai_agents)} available AI agents")
 
         for i, brand_config in enumerate(STATIC_BRAND_CONFIGS):
             try:
@@ -120,19 +128,15 @@ def generate_brands():
                 managing_mode = brand_config["managing_mode"]
                 description = brand_config["description"]
 
-                ai_agent_id = None
-                ai_agent_name_log = None
-
-                if ai_agents:
-                    selected_agent = random.choice(ai_agents)
-                    ai_agent_id = selected_agent[0]
-                    ai_agent_name_log = selected_agent[1]
-                elif created_fallback_agent_id:
-                    ai_agent_id = created_fallback_agent_id
-                    ai_agent_name_log = created_fallback_agent_name
-                else:
-                    logger.error(f"Cannot find or create an AI agent for brand {brand_name}. Skipping.")
+                # Find the best AI agent for this brand's country
+                selected_agent = find_best_ai_agent(ai_agents, country)
+                if not selected_agent:
+                    logger.error(f"Cannot find a suitable AI agent for brand {brand_name}. Skipping.")
                     continue
+
+                ai_agent_id = selected_agent[0]
+                ai_agent_name = selected_agent[1]
+                ai_agent_lang = selected_agent[2]
 
                 cursor.execute("""
                     INSERT INTO kneobroadcaster__brands
@@ -163,7 +167,7 @@ def generate_brands():
 
                 logger.info(
                     f"Brand {i + 1}/{len(STATIC_BRAND_CONFIGS)} inserted: {brand_name} ({country}, {time_zone})")
-                logger.info(f"  Color: {color}, AI Agent: {ai_agent_name_log}")
+                logger.info(f"  Color: {color}, AI Agent: {ai_agent_name} (lang: {ai_agent_lang})")
                 logger.info(f"  Description: {description[:50]}...")
                 conn.commit()
 

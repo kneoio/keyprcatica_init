@@ -10,7 +10,7 @@ genre_options_data = [
             "en": "Alternative Rock",
             "pt": "Rock Alternativo",
             "kk": "Альтернативті рок",
-            "rus": "Альтернативный рок"
+            "ru": "Альтернативный рок"
         }
     },
     {
@@ -19,7 +19,7 @@ genre_options_data = [
             "en": "Ambient",
             "pt": "Música Ambiente",
             "kk": "Эмбиент",
-            "rus": "Эмбиент"
+            "ru": "Эмбиент"
         }
     },
     {
@@ -28,7 +28,7 @@ genre_options_data = [
             "en": "Blues",
             "pt": "Blues",
             "kk": "Блюз",
-            "rus": "Блюз"
+            "ru": "Блюз"
         }
     },
     {
@@ -37,7 +37,7 @@ genre_options_data = [
             "en": "Chillout",
             "pt": "Chillout",
             "kk": "Чиллаут",
-            "rus": "Чиллаут"
+            "ru": "Чиллаут"
         }
     },
     {
@@ -46,7 +46,7 @@ genre_options_data = [
             "en": "Classical",
             "pt": "Música Clássica",
             "kk": "Классикалық музыка",
-            "rus": "Классическая музыка"
+            "ru": "Классическая музыка"
         }
     },
     {
@@ -55,7 +55,7 @@ genre_options_data = [
             "en": "Country",
             "pt": "Country",
             "kk": "Кантри",
-            "rus": "Кантри"
+            "ru": "Кантри"
         }
     },
     {
@@ -64,7 +64,7 @@ genre_options_data = [
             "en": "Crowd Rock",
             "pt": "Rock de Estádio",
             "kk": "Стадиондық рок",
-            "rus": "Стадионный рок"
+            "ru": "Стадионный рок"
         }
     },
     {
@@ -73,7 +73,7 @@ genre_options_data = [
             "en": "Dance",
             "pt": "Dance Music",
             "kk": "Би музыкасы",
-            "rus": "Танцевальная музыка"
+            "ru": "Танцевальная музыка"
         }
     },
     {
@@ -82,7 +82,7 @@ genre_options_data = [
             "en": "Dark Synth",
             "pt": "Dark Synth",
             "kk": "Dark Synth",
-            "rus": "Дарк-синт"
+            "ru": "Дарк-синт"
         }
     },
     {
@@ -91,7 +91,7 @@ genre_options_data = [
             "en": "Downtempo",
             "pt": "Downtempo",
             "kk": "Даунтемпо",
-            "rus": "Даунтемпо"
+            "ru": "Даунтемпо"
         }
     },
     {
@@ -100,7 +100,7 @@ genre_options_data = [
             "en": "Drum and Bass",
             "pt": "Drum and Bass",
             "kk": "Драм-н-бэйс",
-            "rus": "Драм-н-бэйс"
+            "ru": "Драм-н-бэйс"
         }
     },
     {
@@ -109,7 +109,7 @@ genre_options_data = [
             "en": "Dubstep",
             "pt": "Dubstep",
             "kk": "Дабстеп",
-            "rus": "Дабстеп"
+            "ru": "Дабстеп"
         }
     },
     {
@@ -118,7 +118,7 @@ genre_options_data = [
             "en": "EBM",
             "pt": "EBM",
             "kk": "EBM",
-            "rus": "EBM"
+            "ru": "EBM"
         }
     },
     {
@@ -127,7 +127,7 @@ genre_options_data = [
             "en": "Electronic",
             "pt": "Música Eletrónica",
             "kk": "Электрондық музыка",
-            "rus": "Электронная музыка"
+            "ru": "Электронная музыка"
         }
     },
     {
@@ -136,7 +136,7 @@ genre_options_data = [
             "en": "Electropop",
             "pt": "Electropop",
             "kk": "Электропоп",
-            "rus": "Электропоп"
+            "ru": "Электропоп"
         }
     },
     {
@@ -145,7 +145,7 @@ genre_options_data = [
             "en": "Experimental",
             "pt": "Música Experimental",
             "kk": "Эксперименттік музыка",
-            "rus": "Экспериментальная музыка"
+            "ru": "Экспериментальная музыка"
         }
     },
     {
@@ -154,7 +154,7 @@ genre_options_data = [
             "en": "Folk",
             "pt": "Música Folclórica",
             "kk": "Фолк",
-            "rus": "Фолк"
+            "ru": "Фолк"
         }
     },
     {
@@ -163,7 +163,7 @@ genre_options_data = [
             "en": "Funk",
             "pt": "Funk",
             "kk": "Фанк",
-            "rus": "Фанк"
+            "ru": "Фанк"
         }
     },
     {
@@ -172,7 +172,7 @@ genre_options_data = [
             "en": "Futurepop",
             "pt": "Futurepop",
             "kk": "Futurepop",
-            "rus": "Futurepop"
+            "ru": "Futurepop"
         }
     },
     {
@@ -181,7 +181,7 @@ genre_options_data = [
             "en": "Garage Rock",
             "pt": "Garage Rock",
             "kk": "Гараж рок",
-            "rus": "Гаражный рок"
+            "ru": "Гаражный рок"
         }
     },
     {
@@ -190,7 +190,7 @@ genre_options_data = [
             "en": "Gospel",
             "pt": "Gospel",
             "kk": "Госпел",
-            "rus": "Госпел"
+            "ru": "Госпел"
         }
     },
     {
@@ -199,7 +199,7 @@ genre_options_data = [
             "en": "Goth Rock",
             "pt": "Rock Gótico",
             "kk": "Готикалық рок",
-            "rus": "Готик-рок"
+            "ru": "Готик-рок"
         }
     },
     {
@@ -208,7 +208,7 @@ genre_options_data = [
             "en": "Grunge",
             "pt": "Grunge",
             "kk": "Гранж",
-            "rus": "Гранж"
+            "ru": "Гранж"
         }
     },
     {
@@ -217,7 +217,7 @@ genre_options_data = [
             "en": "Hard Rock",
             "pt": "Hard Rock",
             "kk": "Хард-рок",
-            "rus": "Хард-рок"
+            "ru": "Хард-рок"
         }
     },
     {
@@ -226,7 +226,7 @@ genre_options_data = [
             "en": "Hip Hop",
             "pt": "Hip Hop",
             "kk": "Хип-хоп",
-            "rus": "Хип-хоп"
+            "ru": "Хип-хоп"
         }
     },
     {
@@ -235,7 +235,7 @@ genre_options_data = [
             "en": "House",
             "pt": "House Music",
             "kk": "Хаус",
-            "rus": "Хаус"
+            "ru": "Хаус"
         }
     },
     {
@@ -244,7 +244,7 @@ genre_options_data = [
             "en": "IDM",
             "pt": "IDM",
             "kk": "IDM",
-            "rus": "IDM"
+            "ru": "IDM"
         }
     },
     {
@@ -253,7 +253,7 @@ genre_options_data = [
             "en": "Indie Pop",
             "pt": "Indie Pop",
             "kk": "Инди-поп",
-            "rus": "Инди-поп"
+            "ru": "Инди-поп"
         }
     },
     {
@@ -262,7 +262,7 @@ genre_options_data = [
             "en": "Indie Rock",
             "pt": "Indie Rock",
             "kk": "Инди-рок",
-            "rus": "Инди-рок"
+            "ru": "Инди-рок"
         }
     },
     {
@@ -271,7 +271,7 @@ genre_options_data = [
             "en": "Industrial",
             "pt": "Industrial",
             "kk": "Индастриал",
-            "rus": "Индастриал"
+            "ru": "Индастриал"
         }
     },
     {
@@ -280,7 +280,7 @@ genre_options_data = [
             "en": "Industrial Metal",
             "pt": "Metal Industrial",
             "kk": "Индастриал-метал",
-            "rus": "Индастриал-метал"
+            "ru": "Индастриал-метал"
         }
     },
     {
@@ -289,7 +289,7 @@ genre_options_data = [
             "en": "Instrumental",
             "pt": "Instrumental",
             "kk": "Инструменталды",
-            "rus": "Инструментальная"
+            "ru": "Инструментальная"
         }
     },
     {
@@ -298,7 +298,7 @@ genre_options_data = [
             "en": "Jazz",
             "pt": "Jazz",
             "kk": "Джаз",
-            "rus": "Джаз"
+            "ru": "Джаз"
         }
     },
     {
@@ -307,7 +307,7 @@ genre_options_data = [
             "en": "Latin",
             "pt": "Música Latina",
             "kk": "Латын музыкасы",
-            "rus": "Латинская музыка"
+            "ru": "Латинская музыка"
         }
     },
     {
@@ -316,7 +316,7 @@ genre_options_data = [
             "en": "Lo-fi",
             "pt": "Lo-fi",
             "kk": "Lo-fi",
-            "rus": "Lo-fi"
+            "ru": "Lo-fi"
         }
     },
     {
@@ -325,7 +325,7 @@ genre_options_data = [
             "en": "Metal",
             "pt": "Metal",
             "kk": "Метал",
-            "rus": "Метал"
+            "ru": "Метал"
         }
     },
     {
@@ -334,7 +334,7 @@ genre_options_data = [
             "en": "Minimal Synth",
             "pt": "Minimal Synth",
             "kk": "Minimal Synth",
-            "rus": "Минимал-синт"
+            "ru": "Минимал-синт"
         }
     },
     {
@@ -343,7 +343,7 @@ genre_options_data = [
             "en": "New Wave",
             "pt": "New Wave",
             "kk": "Нью-вейв",
-            "rus": "Нью-вейв"
+            "ru": "Нью-вейв"
         }
     },
     {
@@ -352,7 +352,7 @@ genre_options_data = [
             "en": "Noise",
             "pt": "Noise",
             "kk": "Нойз",
-            "rus": "Нойз"
+            "ru": "Нойз"
         }
     },
     {
@@ -361,7 +361,7 @@ genre_options_data = [
             "en": "Other",
             "pt": "Outro",
             "kk": "Басқа",
-            "rus": "Другое"
+            "ru": "Другое"
         }
     },
     {
@@ -370,7 +370,7 @@ genre_options_data = [
             "en": "Pop",
             "pt": "Pop",
             "kk": "Поп",
-            "rus": "Поп"
+            "ru": "Поп"
         }
     },
     {
@@ -379,7 +379,7 @@ genre_options_data = [
             "en": "Post-Punk",
             "pt": "Pós-Punk",
             "kk": "Пост-панк",
-            "rus": "Пост-панк"
+            "ru": "Пост-панк"
         }
     },
     {
@@ -388,7 +388,7 @@ genre_options_data = [
             "en": "Progressive Rock",
             "pt": "Rock Progressivo",
             "kk": "Прогрессивті рок",
-            "rus": "Прогрессивный рок"
+            "ru": "Прогрессивный рок"
         }
     },
     {
@@ -397,7 +397,7 @@ genre_options_data = [
             "en": "Psychedelic Rock",
             "pt": "Rock Psicadélico",
             "kk": "Психоделикалық рок",
-            "rus": "Психоделический рок"
+            "ru": "Психоделический рок"
         }
     },
     {
@@ -406,7 +406,7 @@ genre_options_data = [
             "en": "Punk Rock",
             "pt": "Punk Rock",
             "kk": "Панк-рок",
-            "rus": "Панк-рок"
+            "ru": "Панк-рок"
         }
     },
     {
@@ -415,7 +415,7 @@ genre_options_data = [
             "en": "R&B",
             "pt": "R&B",
             "kk": "R&B",
-            "rus": "R&B"
+            "ru": "R&B"
         }
     },
     {
@@ -424,7 +424,7 @@ genre_options_data = [
             "en": "Reggae",
             "pt": "Reggae",
             "kk": "Регги",
-            "rus": "Регги"
+            "ru": "Регги"
         }
     },
     {
@@ -433,7 +433,7 @@ genre_options_data = [
             "en": "Rock",
             "pt": "Rock",
             "kk": "Рок",
-            "rus": "Рок"
+            "ru": "Рок"
         }
     },
     {
@@ -442,7 +442,7 @@ genre_options_data = [
             "en": "Shoegaze",
             "pt": "Shoegaze",
             "kk": "Шугейз",
-            "rus": "Шугейз"
+            "ru": "Шугейз"
         }
     },
     {
@@ -451,7 +451,7 @@ genre_options_data = [
             "en": "Ska",
             "pt": "Ska",
             "kk": "Ска",
-            "rus": "Ска"
+            "ru": "Ска"
         }
     },
     {
@@ -460,7 +460,7 @@ genre_options_data = [
             "en": "Soul",
             "pt": "Soul",
             "kk": "Соул",
-            "rus": "Соул"
+            "ru": "Соул"
         }
     },
     {
@@ -469,7 +469,7 @@ genre_options_data = [
             "en": "Soundtrack",
             "pt": "Trilha Sonora",
             "kk": "Саундтрек",
-            "rus": "Саундтрек"
+            "ru": "Саундтрек"
         }
     },
     {
@@ -478,7 +478,7 @@ genre_options_data = [
             "en": "Spoken Word",
             "pt": "Palavra Falada",
             "kk": "Spoken Word",
-            "rus": "Разговорный жанр"
+            "ru": "Разговорный жанр"
         }
     },
     {
@@ -487,7 +487,7 @@ genre_options_data = [
             "en": "Synthwave",
             "pt": "Synthwave",
             "kk": "Synthwave",
-            "rus": "Синтвейв"
+            "ru": "Синтвейв"
         }
     },
     {
@@ -496,7 +496,7 @@ genre_options_data = [
             "en": "Techno",
             "pt": "Techno",
             "kk": "Техно",
-            "rus": "Техно"
+            "ru": "Техно"
         }
     },
     {
@@ -505,7 +505,7 @@ genre_options_data = [
             "en": "Trance",
             "pt": "Trance",
             "kk": "Транс",
-            "rus": "Транс"
+            "ru": "Транс"
         }
     },
     {
@@ -514,7 +514,7 @@ genre_options_data = [
             "en": "Trip Hop",
             "pt": "Trip Hop",
             "kk": "Трип-хоп",
-            "rus": "Трип-хоп"
+            "ru": "Трип-хоп"
         }
     },
     {
@@ -523,7 +523,7 @@ genre_options_data = [
             "en": "Vaporwave",
             "pt": "Vaporwave",
             "kk": "Vaporwave",
-            "rus": "Vaporwave"
+            "ru": "Vaporwave"
         }
     },
     {
@@ -532,7 +532,7 @@ genre_options_data = [
             "en": "World Music",
             "pt": "World Music",
             "kk": "Әлем музыкасы",
-            "rus": "Этническая музыка"
+            "ru": "Этническая музыка"
         }
     }
 ]

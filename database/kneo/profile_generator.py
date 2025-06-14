@@ -10,57 +10,48 @@ environments = {
     "care_center": {
         "description": "Focus on nostalgia, gentle volume, cognitive stimulation.",
         "allowed_genres": ["oldies", "classical", "jazz", "folk"],
-        "announcement_frequency": "low",
         "volume_level": "low",
-        "explicit_content": False,
-        "language": "pt"
+        "explicit_content": False
     },
     "hospital": {
         "description": "Calming selections, limited announcement volume, wellness themes.",
         "allowed_genres": ["ambient", "classical", "light jazz", "new age"],
-        "announcement_frequency": "very_low",
         "volume_level": "very_low",
         "explicit_content": False
     },
     "school": {
         "description": "Age-appropriate content, educational ties, energy management.",
         "allowed_genres": ["pop", "educational", "children", "instrumental"],
-        "announcement_frequency": "medium",
         "volume_level": "medium",
         "explicit_content": False
     },
     "car_workshop": {
         "description": "Upbeat tempo, industry-appropriate language, ambient volume.",
         "allowed_genres": ["rock", "classic rock", "country", "pop"],
-        "announcement_frequency": "medium",
         "volume_level": "medium_high",
         "explicit_content": False
     },
     "mall": {
         "description": "Family-friendly content, shopping-compatible tempo, promotional integration.",
         "allowed_genres": ["pop", "easy listening", "soft rock", "ambient"],
-        "announcement_frequency": "high",
         "volume_level": "medium",
         "explicit_content": False
     },
     "office": {
         "description": "Work-appropriate selections, productivity focus, time-aware programming.",
         "allowed_genres": ["ambient", "instrumental", "jazz", "classical", "lo-fi"],
-        "announcement_frequency": "low",
         "volume_level": "low",
         "explicit_content": False
     },
     "family_event": {
         "description": "Occasion-specific content, all-ages appropriate, celebration themes.",
         "allowed_genres": ["pop", "dance", "party", "classics", "contemporary"],
-        "announcement_frequency": "medium_high",
         "volume_level": "high",
         "explicit_content": False
     },
     "student_dorms": {
         "description": "Contemporary selections, social connection themes, study-time awareness.",
         "allowed_genres": ["pop", "electronic", "hip-hop", "rock", "indie"],
-        "announcement_frequency": "medium",
         "volume_level": "medium_high",
         "explicit_content": False
     }
@@ -77,20 +68,17 @@ def generate_profiles():
     # Create profiles
     for name, profile_data in environments.items():
         try:
-            language = profile_data.get("language", None)
             cursor.execute("""
                 INSERT INTO kneobroadcaster__profiles 
                 (author, reg_date, last_mod_user, last_mod_date, name, description, 
-                allowed_genres, announcement_frequency, explicit_content, language)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
+                allowed_genres, explicit_content)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
             """, (
                 0, now, 0, now,
                 name,
                 profile_data["description"],
                 json.dumps(profile_data["allowed_genres"]),
-                profile_data["announcement_frequency"],
-                profile_data["explicit_content"],
-                language
+                profile_data["explicit_content"]
             ))
             profile_id = cursor.fetchone()[0]
             profile_ids[name] = profile_id
