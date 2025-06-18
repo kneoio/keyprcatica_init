@@ -11,6 +11,13 @@ AI_AGENT_DATA_EXAMPLES = [
         "name": "Glo",
         "preferred_lang": "en",
         "main_prompt": "You are a radio DJ for {brand}. Introduce {song_title} by {artist} to our audience, including listeners like {listeners}. Factor in the current context: {context}. Important constraint: Keep introduction extremely concise (10-30 words) - longer introductions cannot be used. Your introduction should connect naturally with previous interactions. Previous interactions context: {history}",
+        "filler_prompt": [
+            "Upbeat radio jingle with energetic synth melody",
+            "Smooth jazz transition with soft saxophone",
+            "Modern electronic beep sequence",
+            "Subtle ambient whoosh sound",
+            "Light percussion drum roll"
+        ],
         "preferred_voice": [{"id":"nPczCjzI2devNBz1zQrb","name":"Brain"},{"id":"CwhRBWXzGAHq8TQ4Fs17","name":"Roger"}],
         "enabled_tools": [
             {"name": "Song Request Tool", "variable_name": "find_song", "description": "Finds and queues a song based on listener request."}
@@ -21,6 +28,13 @@ AI_AGENT_DATA_EXAMPLES = [
         "name": "Veenuo",
         "preferred_lang": "en",
         "main_prompt": "You are a radio DJ for {brand}. Your job is to introduce {song_title} by {artist} while connecting with our audience, like {listeners}. Take into account the current context: {context}. Critical: Your introduction must be short (10-30 words only) - exceeding this limit is not acceptable. Ensure your introduction flows smoothly from previous interactions. Previous interactions context: {history}",
+        "filler_prompt": [
+            "Professional news intro with deep orchestral brass",
+            "Serious documentary-style transition sound",
+            "Corporate presentation background tone",
+            "Authoritative clock ticking sequence",
+            "News bulletin alert sound effect"
+        ],
         "preferred_voice": [{"id": "TX3LPaxmHKxFdv7VOQHJ","name": "Liam"},{"id": "cjVigY5qzO86Huf0OWal","name": "Eric"}],
         "enabled_tools": [
             {"name": "Current Headlines API", "variable_name": "get_headlines", "description": "Fetches the latest news headlines from a trusted source."}
@@ -30,8 +44,16 @@ AI_AGENT_DATA_EXAMPLES = [
     {
         "name": "Nixeno",
         "preferred_lang": "en",
-        "main_prompt": "You are a radio DJ for {brand}. Introduce {song_title} by {artist}. Connect with our audience, like {listeners}. Consider the current context: {context}. Keep your introduction short (10-20 words). Make sure your introduction flows naturally from previous interactions. Previous interactions context: {history}",
-        "preferred_voice": [{"id":"nPczCjzI2devNBz1zQrb","name":"Brain"},{"id":"CwhRBWXzGAHq8TQ4Fs17","name":"Roger"}],
+        "main_prompt": "You are a radio DJ for {brand}. Introduce {song_title} by {artist}. Connect with our cherished listeners, like {listeners}, who appreciate the classics. Consider the current context: {context}. Keep your introduction short (10-20 words). Make sure your introduction flows naturally from previous interactions. Previous interactions context: {history}",
+        "filler_prompt": [
+            "Vintage vinyl record scratch and pop",
+            "Classic radio static and tuning sound",
+            "Nostalgic orchestral string section",
+            "Old-fashioned radio dial turning",
+            "Warm analog tape hiss background"
+        ],
+        "preferred_voice": [{"id": "nPczCjzI2devNBz1zQrb", "name": "Brain"},
+                            {"id": "CwhRBWXzGAHq8TQ4Fs17", "name": "Roger"}],
         "enabled_tools": [],
         "talkativity": 0.35
     },
@@ -39,6 +61,13 @@ AI_AGENT_DATA_EXAMPLES = [
         "name": "Ze",
         "preferred_lang": "pt",
         "main_prompt": "És o DJ da rádio {brand}. Apresenta a música {song_title} de {artist}, criando ligação com a nossa audiência, os {listeners}. Considera o contexto atual: {context}. Mantém a introdução curta (10-20 palavras). Garante que flui naturalmente das interações anteriores. Contexto de interações prévias: {history}",
+        "filler_prompt": [
+            "Guitarra portuguesa melodic flourish",
+            "Fado-style acoustic guitar transition",
+            "Portuguese folk accordion melody",
+            "Gentle ocean waves coastal ambience",
+            "Traditional Portuguese bell chime"
+        ],
         "preferred_voice": [{"id": "aLFUti4k8YKvtQGXv0UO","name": "Paulo"}],
         "enabled_tools": [
             {"name": "Global Weather API", "variable_name": "get_weather_forecast", "description": "Provides detailed weather forecasts for any location."}
@@ -49,6 +78,13 @@ AI_AGENT_DATA_EXAMPLES = [
         "name": "Nestor",
         "preferred_lang": "ru",
         "main_prompt": "Вы — диджей радио {brand}. Представьте трек «{song_title}» от {artist}, установив контакт с аудиторией ({listeners}). Учитывайте контекст: {context}. Делайте анонс коротким (10-20 слов) и естественно вписывающимся в предыдущие реплики. Контекст прошлых взаимодействий: {history}.",
+        "filler_prompt": [
+            "Russian balalaika traditional melody",
+            "Soviet-era radio broadcast static",
+            "Orchestral Russian folk dance music",
+            "Moscow street ambient city sounds",
+            "Classic Russian radio station jingle"
+        ],
         "preferred_voice": [{"id": "0BcDz9UPwL3MpsnTeUlO","name": "Denis"}],
         "enabled_tools": [
             {"name": "Global Weather API", "variable_name": "get_weather_forecast", "description": "Provides detailed weather forecasts for any location."}
@@ -82,16 +118,18 @@ def populate_ai_agents():
 
             preferred_voice_json = json.dumps(agent_data["preferred_voice"])
             enabled_tools_json = json.dumps(agent_data["enabled_tools"])
+            filler_prompt_json = json.dumps(agent_data["filler_prompt"])
 
             cursor.execute("""
                 INSERT INTO kneobroadcaster__ai_agents
-                (author, reg_date, last_mod_user, last_mod_date, name, preferred_lang, main_prompt, preferred_voice, enabled_tools, talkativity, archived)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                (author, reg_date, last_mod_user, last_mod_date, name, preferred_lang, main_prompt, filler_prompt, preferred_voice, enabled_tools, talkativity, archived)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 default_user_id, now, default_user_id, now,
                 agent_data["name"],
                 agent_data["preferred_lang"],
                 agent_data["main_prompt"],
+                filler_prompt_json,
                 preferred_voice_json,
                 enabled_tools_json,
                 agent_data["talkativity"],

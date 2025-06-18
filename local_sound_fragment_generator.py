@@ -4,8 +4,7 @@ import random
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional, Dict, Set, Tuple
-import boto3  # Add this import
-
+import boto3
 import magic
 import psycopg2
 from dotenv import load_dotenv
@@ -16,12 +15,10 @@ from util.audio_metadata_parser import AudioMetadataParser
 from util.logging import logger
 from util.permissions import add_default_superuser_permissions
 
-
-# Load environment variables
 load_dotenv()
 
 # Configuration
-SONGS_PER_BRAND = 50  # Maximum number of songs to add per brand
+SONGS_PER_BRAND = 50
 SUPporTED_EXTENSIONS = {'.mp3', '.wav'}
 BATCH_SIZE = 10  # Number of files to process in one batch
 

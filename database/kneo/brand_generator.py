@@ -16,7 +16,7 @@ STATIC_BRAND_CONFIGS = [
         "color": "#1E88E5",
         "country": "PT",
         "time_zone": "Europe/Lisbon",
-        "managing_mode": "AI_AGENT",
+        "managing_mode": "MIX",
         "description": "Ambient electronic and downtempo music for focus and relaxation. Features atmospheric soundscapes, chillout beats, and modern instrumental compositions perfect for work or study sessions."
     },
     {
@@ -24,7 +24,7 @@ STATIC_BRAND_CONFIGS = [
         "color": "#FF6B35",
         "country": "JP",
         "time_zone": "Asia/Tokyo",
-        "managing_mode": "AI_AGENT",
+        "managing_mode": "MIX",
         "description": "Cutting-edge J-pop, electronic dance music, and experimental beats. Showcasing the latest trends in Japanese music culture with high-energy tracks and innovative sound design."
     },
     {
@@ -32,7 +32,7 @@ STATIC_BRAND_CONFIGS = [
         "color": "#DC143C",
         "country": "DE",
         "time_zone": "Europe/Berlin",
-        "managing_mode": "AI_AGENT",
+        "managing_mode": "ITSELF",
         "description": "High-octane rock, metal, and punk music that hits hard. From classic heavy metal anthems to modern hardcore punk, delivering explosive energy 24/7."
     },
     {
@@ -40,28 +40,27 @@ STATIC_BRAND_CONFIGS = [
         "color": "#4CAF50",
         "country": "KZ",
         "time_zone": "Asia/Almaty",
-        "managing_mode": "AI_AGENT",
+        "managing_mode": "MIX",
         "description": "Deep house, funk, disco, and electronic dance music with groovy basslines. Features underground house beats, classic funk rhythms, and modern disco-influenced tracks that keep the dance floor moving."
     },
     {
-        "name": "bit2bit",
+        "name": "the-radiola",
         "color": "#9C27B0",
         "country": "GB",
         "time_zone": "Europe/London",
-        "managing_mode": "AI_AGENT",
-        "description": "Nostalgic chiptune and 8-bit music celebrating retro gaming culture. From classic arcade soundtracks to modern chip music artists, perfect for gamers and digital nostalgia enthusiasts."
+        "managing_mode": "MIX",
+        "description": "We're your go-to for all things retro, from the swingin' jazz of the '20s to the soulful R&B of the '60s, and the classic rock anthems of the '70s. Perfect for anyone who loves the warm, authentic vibes of bygone eras."
     },
     {
         "name": "labirints",
         "color": "#FF9800",
         "country": "LV",
         "time_zone": "Europe/Riga",
-        "managing_mode": "AI_AGENT",
+        "managing_mode": "MIX",
         "description": "Dark industrial, experimental electronic, and intelligent dance music (IDM). Features harsh mechanical beats, complex rhythmic patterns, and avant-garde electronic compositions for discerning listeners."
     }
 ]
 
-# Country to preferred language mapping
 COUNTRY_LANGUAGE_MAP = {
     "PT": ["pt", "en"],  # Portuguese, fallback to English
     "JP": ["ja", "en"],  # Japanese, fallback to English
@@ -83,10 +82,8 @@ def find_best_ai_agent(ai_agents, country):
     if not ai_agents:
         return None
 
-    # Get preferred languages for the country
     preferred_languages = COUNTRY_LANGUAGE_MAP.get(country, ["en"])
 
-    # Try to find agents that match the preferred languages in order
     for preferred_lang in preferred_languages:
         matching_agents = [agent for agent in ai_agents if agent[2] == preferred_lang]
         if matching_agents:
@@ -128,19 +125,26 @@ def generate_brands():
                 managing_mode = brand_config["managing_mode"]
                 description = brand_config["description"]
 
-                # Find the best AI agent for this brand's country
-                selected_agent = find_best_ai_agent(ai_agents, country)
-                if not selected_agent:
-                    logger.error(f"Cannot find a suitable AI agent for brand {brand_name}. Skipping.")
-                    continue
+                # --- MODIFICATION START ---
+                ai_agent_id = None  # Initialize to None
+                ai_agent_name = "N/A"
+                ai_agent_lang = "N/A"
 
-                ai_agent_id = selected_agent[0]
-                ai_agent_name = selected_agent[1]
-                ai_agent_lang = selected_agent[2]
+                if managing_mode == "AI_AGENT":
+                    selected_agent = find_best_ai_agent(ai_agents, country)
+                    if not selected_agent:
+                        logger.error(f"Cannot find a suitable AI agent for brand {brand_name} (managing_mode=AI_AGENT). Skipping.")
+                        continue
+                    ai_agent_id = selected_agent[0]
+                    ai_agent_name = selected_agent[1]
+                    ai_agent_lang = selected_agent[2]
+                else: # managing_mode is "ITSELF"
+                    logger.info(f"Brand {brand_name} is managed by ITSELF. AI agent will not be bound.")
+                # --- MODIFICATION END ---
 
                 cursor.execute("""
                     INSERT INTO kneobroadcaster__brands
-                    (author, reg_date, last_mod_user, last_mod_date, country, 
+                    (author, reg_date, last_mod_user, last_mod_date, country,
                      loc_name, slug_name, archived, color, schedule, ai_agent_id, managing_mode, time_zone, description)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
                 """, (
