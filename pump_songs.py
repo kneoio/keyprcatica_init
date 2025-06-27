@@ -19,9 +19,15 @@ from util.mime_utils import determine_mime_type
 from util.permissions import add_default_superuser_permissions
 
 BRAND_SLUG = "aizoo"
+#BRAND_SLUG = "labirints"
+#BRAND_SLUG = "bratan"
 SONGS_TO_ADD = 500
 
 BRAND_PREFERRED_FOLDERS = ["suno", "music", "electronic"]
+#BRAND_PREFERRED_FOLDERS = ["DepecheMode"]
+#BRAND_PREFERRED_FOLDERS = ["hiphop", "synthpop"]
+#BRAND_PREFERRED_FOLDERS = ["house"]
+#BRAND_PREFERRED_FOLDERS = ["numan"]
 
 MAX_FILES_PER_FOLDER = 1000
 MAX_FETCH_POOL_SIZE = 100
