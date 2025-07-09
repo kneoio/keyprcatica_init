@@ -2,12 +2,12 @@ from datetime import datetime
 from database import get_connection
 from util.logging import logger
 
-MAIN_TABLE = "kneobroadcaster__listeners"
-READER_TABLE = "kneobroadcaster__listener_readers"
+#MAIN_TABLE = "kneobroadcaster__listeners"
+#READER_TABLE = "kneobroadcaster__listener_readers"
 
 READ_ONLY_USER_IDS = [1, 5, 6]
 CAN_EDIT_USER_IDS = [1, 5, 6]
-CAN_DELETE_USER_IDS = [5, 6]
+CAN_DELETE_USER_IDS = [1, 5, 6]
 
 TARGET_ENTITY_IDS = []
 

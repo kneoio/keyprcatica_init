@@ -5,7 +5,10 @@ import uuid  # Assuming you have this module
 
 TABLE_PROCESSING_CONFIG = [
     {"table": "kneobroadcaster__listeners", "ids": []},
-    #{"table": "kneobroadcaster__sound_brands", "ids": []},
+    {"table": "kneobroadcaster__brands", "ids": []},
+    {"table": "kneobroadcaster__profiles", "ids": []},
+    {"table": "kneobroadcaster__ai_agents", "ids": []},
+    {"table": "kneobroadcaster__sound_fragments", "ids": []},
 ]
 
 READ_ONLY_USER_IDS = [
