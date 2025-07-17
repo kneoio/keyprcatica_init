@@ -1,7 +1,6 @@
 from datetime import datetime
-from database import get_connection  # Assuming you have this module
-from util.logging import logger  # Assuming you have this module
-import uuid  # Assuming you have this module
+from database import get_connection
+from util.logging import logger
 
 TABLE_PROCESSING_CONFIG = [
     {"table": "kneobroadcaster__listeners", "ids": []},
@@ -30,7 +29,6 @@ def get_reader_table_name(main_table):
 
 
 def table_exists(cursor, table_name):
-    """Checks if a table exists in the database."""
     try:
         cursor.execute("""
             SELECT EXISTS (
@@ -46,10 +44,6 @@ def table_exists(cursor, table_name):
 
 
 def get_entity_ids(cursor, main_table, specific_entity_ids=None):
-    """
-    Fetches entity IDs from the main_table.
-    An empty list or None for specific_entity_ids means fetch all.
-    """
     try:
         query = ""
         params = ()
@@ -92,9 +86,6 @@ def get_permission_details(cursor, reader_table, principal_id, entity_id):
 def add_permissions(cursor, principal_id, reader_table, main_table_name,
                     can_edit_for_principal, can_delete_for_principal,
                     entity_ids_list_filter=None):
-    """
-    Adds or updates permissions for a principal to entities in a table.
-    """
     try:
         if not table_exists(cursor, reader_table):
             logger.warning(
@@ -174,9 +165,6 @@ def add_permissions(cursor, principal_id, reader_table, main_table_name,
 
 
 def grant_access():
-    """
-    Grants access permissions based on TABLE_PROCESSING_CONFIG and ID lists.
-    """
     if not TABLE_PROCESSING_CONFIG:
         logger.warning("TABLE_PROCESSING_CONFIG is empty. No operations to perform.")
         return

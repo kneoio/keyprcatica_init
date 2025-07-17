@@ -2,11 +2,9 @@ import json
 from datetime import datetime
 from slugify import slugify
 import random
-import colorsys
 
-from cnst.const import generate_loc_name, VALID_COUNTRY_CODES
+from cnst.const import generate_loc_name
 from database import get_connection
-from cnst.country_codes import country_codes
 from util.logging import logger
 from util.permissions import add_default_superuser_permissions
 
@@ -91,7 +89,6 @@ def find_best_ai_agent(ai_agents, country):
                 f"Found {len(matching_agents)} agent(s) with preferred language '{preferred_lang}' for country '{country}'")
             return random.choice(matching_agents)
 
-    # If no language match found, return a random agent
     logger.info(f"No language-specific agent found for country '{country}', selecting random agent")
     return random.choice(ai_agents)
 
@@ -118,7 +115,6 @@ def generate_brands():
                 slug_name = slugify(brand_name)
                 loc_name = generate_loc_name(brand_name, brand_name, brand_name)
 
-                # Use hardcoded values from configuration
                 country = brand_config["country"]
                 color = brand_config["color"]
                 time_zone = brand_config["time_zone"]
@@ -138,9 +134,8 @@ def generate_brands():
                     ai_agent_id = selected_agent[0]
                     ai_agent_name = selected_agent[1]
                     ai_agent_lang = selected_agent[2]
-                else: # managing_mode is "ITSELF"
+                else:
                     logger.info(f"Brand {brand_name} is managed by ITSELF. AI agent will not be bound.")
-                # --- MODIFICATION END ---
 
                 cursor.execute("""
                     INSERT INTO kneobroadcaster__brands
@@ -151,7 +146,7 @@ def generate_brands():
                     0, now, 0, now, country,
                     json.dumps(loc_name),
                     slug_name,
-                    0,  # archived = False
+                    0,
                     color,
                     json.dumps({}), ai_agent_id, managing_mode, time_zone, description
                 ))

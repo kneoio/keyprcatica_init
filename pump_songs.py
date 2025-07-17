@@ -18,12 +18,13 @@ from util.logging import logger
 from util.mime_utils import determine_mime_type
 from util.permissions import add_default_superuser_permissions
 
-BRAND_SLUG = "aizoo"
+#BRAND_SLUG = "aizoo"
 #BRAND_SLUG = "labirints"
 #BRAND_SLUG = "bratan"
-SONGS_TO_ADD = 500
+BRAND_SLUG = "tsuki5"
+SONGS_TO_ADD = 5000
 
-BRAND_PREFERRED_FOLDERS = ["suno", "music", "electronic"]
+BRAND_PREFERRED_FOLDERS = ["suno", "music", "electronic", "japanase"]
 #BRAND_PREFERRED_FOLDERS = ["DepecheMode"]
 #BRAND_PREFERRED_FOLDERS = ["hiphop", "synthpop"]
 #BRAND_PREFERRED_FOLDERS = ["house"]
@@ -43,7 +44,7 @@ region = os.getenv('DO_SPACES_REGION')
 endpoint = os.getenv('DO_SPACES_ENDPOINT')
 bucket_name = os.getenv('DO_SPACES_BUCKET')
 
-if BRAND_SLUG not in ["aizoo", "bit2bit", "nitroglycerin", "labirints", "sexta", "bratan"]:
+if BRAND_SLUG not in ["aizoo", "pulse", "nitroglycerin", "labirints", "sexta", "bratan"]:
     logger.error(f"BRAND_SLUG '{BRAND_SLUG}' is not a recognized static brand.")
     exit(1)
 

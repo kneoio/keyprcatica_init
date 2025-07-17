@@ -83,14 +83,12 @@ def generate_profiles():
             profile_id = cursor.fetchone()[0]
             profile_ids[name] = profile_id
 
-            # Add superuser permissions
             add_default_superuser_permissions(cursor, profile_id, "kneobroadcaster__profile_readers")
 
             logger.info(f"Profile created: {name}")
         except Exception as e:
             logger.error(f"Error creating profile {name}: {e}")
 
-    # Assign profiles to brands randomly
     try:
         cursor.execute("SELECT id FROM kneobroadcaster__brands")
         brands = cursor.fetchall()

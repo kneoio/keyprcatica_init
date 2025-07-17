@@ -103,7 +103,6 @@ def populate_brand_memories():
                 ))
                 logger.info(f"  + Created 'LISTENERS' memory for '{brand_slug}'.")
 
-            # --- Generate and Insert AUDIENCE_CONTEXT Memory ---
             cursor.execute("""
                 SELECT 1 FROM kneobroadcaster__memories
                 WHERE brand = %s AND memory_type = 'AUDIENCE_CONTEXT'
