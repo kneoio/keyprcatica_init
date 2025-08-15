@@ -25,3 +25,4 @@ venv/
 
 # SSH tunnel script
 run_tunnel.ps1
+*.wav
